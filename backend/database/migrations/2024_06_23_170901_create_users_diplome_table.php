@@ -12,11 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users_diplome', function (Blueprint $table) {
-            $table->string('code_user', 32);
-            $table->smallInteger('code_dip');
-            $table->date('date_obtention_dip');
+            $table->char('code_user', 32);
+            $table->smallInteger('code_dip', 1);
+            $table->date('annee_dip');
+            $table->string('institution_dip', 128);
+            $table->string('mention_dip', 128);
+            $table->string('pays_dip', 128);
             $table->primary(['code_user', 'code_dip']);
             $table->foreign('code_user')->references('code_user')->on('users');
+            $table->foreign('code_dip')->references('code_dip')->on('diplome');
             $table->timestamps();
         });
     }

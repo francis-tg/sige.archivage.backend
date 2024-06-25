@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('filiere_niveau', function (Blueprint $table) {
-            $table->string('code_filiere', 32);
-            $table->string('code_niveau', 32);
-            $table->primary(['code_filiere', 'code_niveau']);
+            $table->char('code_filiere', 32);
+            $table->char('code_niveau', 32);
+            $table->char('code_ins', 32);
+            $table->primary(['code_filiere', 'code_niveau', 'code_ins']);
             $table->foreign('code_filiere')->references('code_filiere')->on('filiere');
             $table->foreign('code_niveau')->references('code_niveau')->on('niveau');
+            $table->foreign('code_ins')->references('code_ins')->on('inscription');
             $table->timestamps();
         });
     }

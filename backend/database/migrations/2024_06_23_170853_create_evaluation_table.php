@@ -12,17 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('evaluation', function (Blueprint $table) {
-            $table->char('code_eval', 32)->primary();
-            $table->string('code_ec', 32);
-            $table->smallInteger('code_annee');
-            $table->char('code_session', 32);
-            $table->smallInteger('note_eval')->nullable();
-            $table->text('remarque_eval')->nullable();
-            $table->dateTime('date_eval');
-            $table->string('code_user', 32);
+            $table->char('code_ec', 32);
+            $table->char('code_examen', 32);
+            $table->char('code_user', 32);
+            $table->date('date_evaluation');
+            $table->char('code_ano', 32)->nullable();
+            $table->decimal('note_eval', 10, 2);
+            $table->date('date_evalu');
+            $table->primary(['code_ec', 'code_examen', 'code_user']);
             $table->foreign('code_ec')->references('code_ec')->on('ec');
-            $table->foreign('code_annee')->references('code_annee')->on('anneescolaire');
-            $table->foreign('code_session')->references('code_session')->on('session_examen');
+            $table->foreign('code_examen')->references('code_examen')->on('examen');
             $table->foreign('code_user')->references('code_user')->on('users');
             $table->timestamps();
         });

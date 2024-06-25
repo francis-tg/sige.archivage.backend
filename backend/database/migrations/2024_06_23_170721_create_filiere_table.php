@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('filiere', function (Blueprint $table) {
-            $table->string('code_filiere', 32)->primary();
-            $table->string('nom_filiere', 128);
+            $table->char('code_filiere', 32);
+            $table->string('code_bureau', 128);
+            $table->string('label_filiere', 128);
             $table->text('desc_filiere')->nullable();
-            $table->string('type_filiere', 128)->nullable();
+            $table->primary('code_filiere');
+            $table->foreign('code_bureau')->references('code_bureau')->on('bureau');
             $table->timestamps();
         });
     }

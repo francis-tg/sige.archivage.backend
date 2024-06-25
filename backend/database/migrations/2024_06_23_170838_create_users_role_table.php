@@ -12,8 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users_role', function (Blueprint $table) {
-            $table->string('code_user', 32);
+            $table->char('code_user', 32);
             $table->smallInteger('code_role');
+            $table->date('date_debut_role');
+            $table->date('date_fin_role')->nullable();
+            $table->smallInteger('etat_role');
             $table->primary(['code_user', 'code_role']);
             $table->foreign('code_user')->references('code_user')->on('users');
             $table->foreign('code_role')->references('code_role')->on('role');

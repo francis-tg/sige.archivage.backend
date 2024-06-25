@@ -12,13 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ec', function (Blueprint $table) {
-            $table->string('code_ec', 32)->primary();
-            $table->string('intitule_ec', 128);
-            $table->smallInteger('code_sem');
-            $table->string('code_filiere', 32);
-            $table->text('desc_ec')->nullable();
-            $table->foreign('code_sem')->references('code_sem')->on('semestre');
-            $table->foreign('code_filiere')->references('code_filiere')->on('filiere');
+            $table->char('code_ec', 32)->primary();
+            $table->char('code_ue', 32);
+            $table->char('intitule_ec', 128);
+            $table->smallInteger('credit_ec')->nullable();
+            $table->smallInteger('vh_ec')->nullable();
+            $table->smallInteger('cm_ec')->nullable();
+            $table->smallInteger('td_ec')->nullable();
+            $table->smallInteger('tp_ec')->nullable();
+            $table->smallInteger('tpe_ec')->nullable();
+            $table->foreign('code_ue')->references('code_ue')->on('ue');
             $table->timestamps();
         });
     }

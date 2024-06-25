@@ -12,13 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('quitus', function (Blueprint $table) {
-            $table->char('code_quitus', 32)->primary();
-            $table->string('code_user', 32);
-            $table->string('intitule_quitus', 128);
-            $table->text('desc_quitus')->nullable();
-            $table->dateTime('date_quitus');
-            $table->boolean('statut_quitus');
-            $table->foreign('code_user')->references('code_user')->on('users');
+            $table->char('code_ins', 32);
+            $table->integer('code_tranche');
+            $table->smallInteger('code_mode');
+            $table->string('numero_quitus', 128);
+            $table->date('date_paiement');
+            $table->smallInteger('statut_quitus');
+            $table->primary(['code_ins', 'code_tranche', 'code_mode']);
+            $table->foreign('code_ins')->references('code_ins')->on('inscription');
+            $table->foreign('code_tranche')->references('code_tranche')->on('tranche');
+            $table->foreign('code_mode')->references('code_mode')->on('modepaiment');
             $table->timestamps();
         });
     }

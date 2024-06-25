@@ -12,15 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('documents', function (Blueprint $table) {
-            $table->char('code_doc', 32)->primary();
-            $table->string('code_user', 32);
-            $table->string('intitule_doc', 128);
-            $table->text('desc_doc')->nullable();
-            $table->dateTime('date_up_doc');
-            $table->string('url_doc', 128);
+            $table->char('code_doc', 32);
+            $table->char('code_session', 32);
+            $table->string('code_bureau', 128);
+            $table->string('label_doc', 128);
+            $table->text('description_doc')->nullable();
             $table->string('type_doc', 128);
-            $table->boolean('statut_doc');
-            $table->foreign('code_user')->references('code_user')->on('users');
+            $table->string('nom_fichier', 128);
+            $table->primary('code_doc');
+            $table->foreign('code_session')->references('code_session')->on('session_examen');
+            $table->foreign('code_bureau')->references('code_bureau')->on('bureau');
             $table->timestamps();
         });
     }
