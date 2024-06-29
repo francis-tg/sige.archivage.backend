@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('examen', function (Blueprint $table) {
-            $table->char('code_examen', 32);
-            $table->char('code_session', 32);
-            $table->char('type_evaluation', 32);
-            $table->primary('code_examen');
-            $table->foreign('code_session')->references('code_session')->on('session_examen');
+        Schema::create('admin', function (Blueprint $table) {
+            $table->char('admin_id', 12)->primary()->autoIncrement();
+            $table->string('admin_name', 50);
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('examen');
+        Schema::dropIfExists('admin');
     }
 };

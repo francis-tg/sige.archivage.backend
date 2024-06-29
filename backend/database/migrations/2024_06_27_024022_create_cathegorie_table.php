@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ue', function (Blueprint $table) {
-            $table->char('code_ue', 32)->primary();
-            $table->smallInteger('code_sem');
-            $table->string('intitule_ue', 128);
-            $table->text('desc_ue')->nullable();
-            $table->foreign('code_sem')->references('code_sem')->on('semestre');
+        Schema::create('cathegorie', function (Blueprint $table) {
+            $table->char('cathegorie_id', 12)->primary();
+            $table->string('nom_cath', 32);
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ue');
+        Schema::dropIfExists('cathegorie');
     }
 };

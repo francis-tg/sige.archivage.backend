@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ressource', function (Blueprint $table) {
-            $table->smallInteger('code_res')->primary();
-            $table->string('label_res', 32);
-            $table->string('type_res', 32);
-            $table->text('desc_res')->nullable();
+        Schema::create('service', function (Blueprint $table) {
+            $table->char('service_id', 12)->primary();
+            $table->string('nom_service', 50);
             $table->timestamps();
         });
     }
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ressource');
+        Schema::dropIfExists('service');
     }
 };

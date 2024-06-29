@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bureau', function (Blueprint $table) {
-            $table->string('code_bureau', 128)->primary();
-            $table->string('label_div', 128);
-            $table->text('desc_div')->nullable();
-            $table->string('type_bureau', 128);
+        Schema::create('role', function (Blueprint $table) {
+            $table->char('role_id', 12)->primary()->autoIncrement();
+            $table->char('admin_id', 12);
+            $table->string('nom_role');
+            $table->foreign('admin_id')->references('admin_id')->on('admin');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bureau');
+        Schema::dropIfExists('role');
     }
 };
