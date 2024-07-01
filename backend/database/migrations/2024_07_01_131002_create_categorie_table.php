@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admin', function (Blueprint $table) {
-            $table->char('admin_id', 12)->primary()->autoIncrement();
-            $table->string('admin_name', 50);
+        Schema::create('categorie', function (Blueprint $table) {
+            $table->integer('id_cat')->primary();
+            $table->char('label_cat', 32);
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admin');
+        Schema::dropIfExists('categorie');
     }
 };

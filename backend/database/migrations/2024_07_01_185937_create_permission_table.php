@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('service', function (Blueprint $table) {
-            $table->char('service_id', 12)->primary();
-            $table->string('nom_service', 50);
+        Schema::create('permission', function (Blueprint $table) {
+            $table->smallInteger('code_permis')->primary();
+            $table->string('label_permis', 128);
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('service');
+        Schema::dropIfExists('permission');
     }
 };

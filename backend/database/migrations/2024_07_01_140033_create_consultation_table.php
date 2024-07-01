@@ -12,14 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('consultation', function (Blueprint $table) {
-            $table->char('consultation_id', 12)->primary();
-            $table->char('document_id', 12);
-            $table->char('service_id', 12);
-            $table->char('cathegorie_id', 12);
-            $table->foreign('document_id')->references('document_id')->on('document');
-            $table->foreign('service_id')->references('service_id')->on('service');
-            $table->foreign('cathegorie_id')->references('cathegorie_id')->on('cathegorie');
+            $table->char('code_pers', 32);
+            $table->integer('doc_id');
+            $table->dateTime('date_consultation');
+            $table->primary(['code_pers', 'doc_id']);
             $table->timestamps();
+
+            $table->foreign('code_pers')->references('code_pers')->on('personnel')->onDelete('cascade');
+            $table->foreign('doc_id')->references('doc_id')->on('document')->onDelete('cascade');
+
         });
     }
 
