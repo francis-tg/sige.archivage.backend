@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('role_permission', function (Blueprint $table) {
             $table->smallInteger('code_permis')->primary();
-            $table->integer('id');
             $table->smallInteger('code_role');
             $table->timestamps();
 
-            $table->foreign('role_permission_permission')->references('code_permis')->on('role_permission')->onDelete('cascade');
-            $table->foreign('role_permission_role')->references('code_permis')->on('role_permission')->onDelete('cascade');
+            $table->foreign('code_permis')->references('code_permis')->on('rpermission')->onDelete('cascade');
+            $table->foreign('code_role')->references('code_permis')->on('role')->onDelete('cascade');
 
         });
     }

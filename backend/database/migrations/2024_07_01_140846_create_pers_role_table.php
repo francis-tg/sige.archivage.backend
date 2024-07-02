@@ -22,11 +22,11 @@ return new class extends Migration
             $table->timestamps();
 
 
-            
-            $table->foreign('id')->references('id')->on('id')->onDelete('cascade');
-            $table->foreign('pers_role_role')->references('id')->on('role')->onDelete('cascade');
-            $table->foreign('pers_role_bureau')->references('id')->on('bureau')->onDelete('cascade');
-            $table->foreign('pers_role_personnel')->references('id')->on('personnel')->onDelete('cascade');
+
+           // $table->foreign('id')->references('id')->on('id')->onDelete('cascade');
+            $table->foreign('code_role')->references('code_role')->on('role')->onDelete('cascade');
+            $table->foreign('code_bureau')->references('code_bureau')->on('bureau')->onDelete('cascade');
+            $table->foreign('code_pers')->references('code_pers')->on('personnel')->onDelete('cascade');
 
         });
     }
