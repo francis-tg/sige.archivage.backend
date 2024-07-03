@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cathegorie extends Model
+class Permission extends Model
 {
     use HasFactory;
-    protected $table = 'categorie';
-    protected $primaryKey = 'id_cat';
+    protected $table = 'permission';
+    protected $primaryKey = 'code_permis';
     public $incrementing = false;
     public $timestamp = true;
 
     protected $fillable = [
-        'id_cat',
-        'label_cat'
+        'code_permis',
+        'label_permis'
     ];
 }
