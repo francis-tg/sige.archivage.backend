@@ -1,17 +1,18 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\Admin;
+
+use App\Models\RolePermission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AdminSeeder extends Seeder
+class RolePermissionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Admin::factory()->count(1)->create();
+        RolePermission::factory()->count(4)->create();
     }
 }

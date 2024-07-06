@@ -5,17 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Consultation extends Model
+class PersRole extends Model
 {
     use HasFactory;
-    protected $table = 'consultation';
-    protected $primaryKey = ['code_pers', 'doc_id'];
+    protected $table = 'pers_role';
+    protected $primaryKey = 'id';
     public $incrementing = true;
     public $timestamp = true;
 
     protected $fillable = [
+        'id',
+        'code_role',
+        'code_bureau',
         'code_pers',
-        'doc_id',
-        'date_consultation'
+        'date_debut_role',
+        'date_fin_role',
+        'statut'
     ];
 }

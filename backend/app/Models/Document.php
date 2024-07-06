@@ -9,22 +9,23 @@ class Document extends Model
 {
     use HasFactory;
     protected $table = 'document';
-    protected $primaryKey = 'document_id';
+    protected $primaryKey = 'doc_id';
     public $incrementing = true;
     public $timestamp = true;
 
     protected $fillable = [
-        'document_id',
-        'cathegorie_id',
+        'doc_id',
+        'id_cat',
+        'code_bureau',
         'titre',
         'auteur',
         'date_creation',
-        'date_derniere_mod',
+        'date_der_mod',
         'type',
-        'resume',
-        'taille',
+        'resumé',
         'reference',
         'emplacement_doc',
-        'status_doc'
+        'status_doc',
+        'taille'
     ];
 }
