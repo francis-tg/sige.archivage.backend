@@ -4,7 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthPersonnelMiddleware
@@ -16,8 +17,16 @@ class AuthPersonnelMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
-            return response()->json(['message' => 'Non autorisé'], 401);
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+        } catch (Exception $e) {
+            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
+                return response()->json(['message' => 'Token invalide'], 401);
+            } elseif ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
+                return response()->json(['message' => 'Token expiré'], 401);
+            } else {
+                return response()->json(['message' => 'Token d\'autorisation non trouvé'], 401);
+            }
         }
 
         return $next($request);

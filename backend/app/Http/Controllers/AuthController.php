@@ -7,6 +7,7 @@ use App\Models\Personnel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -22,11 +23,18 @@ class AuthController extends Controller
 
         $personnel = Personnel::where('login_pers', $validatedData['login_pers'])->first();
 
-        if ($personnel && Hash::check($validatedData['pwd_pers'], $personnel->pwd_pers)) {
-            return response()->json(['message' => 'Authentification réussie', 'personnel' => $personnel], 200);
-        } else {
+        if (!$personnel || !Hash::check($validatedData['pwd_pers'], $personnel->pwd_pers)) {
             return response()->json(['message' => 'Identifiants incorrects'], 401);
         }
+
+        // Generate JWT token
+        $token = JWTAuth::fromUser($personnel);
+
+        return response()->json([
+            'message' => 'Authentification réussie',
+            'token' => $token,
+            'personnel' => $personnel,
+        ], 200);
     }
 
     /**
@@ -41,7 +49,13 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $personnel = Auth::user();
-            return response()->json(['message' => 'Authentification réussie', 'personnel' => $personnel], 200);
+            $token = JWTAuth::fromUser($personnel);
+
+            return response()->json([
+                'message' => 'Authentification réussie',
+                'token' => $token,
+                'personnel' => $personnel,
+            ], 200);
         } else {
             return response()->json(['message' => 'Identifiants incorrects'], 401);
         }
