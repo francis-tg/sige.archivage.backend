@@ -8,13 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Personnel extends Model
 {
     use HasFactory;
-
     protected $table = 'personnel';
     protected $primaryKey = 'code_pers';
     public $incrementing = false;
-    protected $keyType = 'string';
-    public $timestamps = true;
-
+    public $timestamp = true;
 
     protected $fillable = [
         'code_pers',

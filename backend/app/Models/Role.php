@@ -8,17 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
-
     protected $table = 'role';
     protected $primaryKey = 'code_role';
-    public $incrementing = true;
-    protected $keyType = 'int';
-    public $timestamps = true;
-
+    public $incrementing = false;
+    public $timestamp = true;
 
     protected $fillable = [
         'code_role',
         'label_role',
-        'acreditation_role',
+        'acreditation_role'
     ];
 }
