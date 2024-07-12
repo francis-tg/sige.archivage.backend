@@ -2,17 +2,32 @@
 
 namespace Database\Seeders;
 
-use App\Models\RolePermission;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\RolePermission;
 
 class RolePermissionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     *
+     * @return void
      */
-    public function run(): void
+    public function run()
     {
-        RolePermission::factory()->count(4)->create();
+        // Example: Associating permissions with roles
+        RolePermission::create([
+            'code_role' => 'admin', // Example role code
+        ]);
+
+        RolePermission::create([
+            'code_role' => 'editor',
+        ]);
+
+        RolePermission::create([
+            'code_permis' => 'view_reports',
+            'code_role' => 'viewer',
+        ]);
+
+        // Add more role permission associations as needed
     }
 }
