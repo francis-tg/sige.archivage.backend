@@ -1,8 +1,8 @@
-import { IoApps, IoDocumentAttach } from "react-icons/io5"
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Separator } from "../ui/ui/separator"
-import { LuUsers2 } from "react-icons/lu"
+import { IoApps, IoDocumentAttach } from "react-icons/io5";
+import React from 'react';
+import { Separator } from "../ui/ui/separator";
+import { LuUsers2 } from "react-icons/lu";
+import NavLink from './NavLink'; // Assurez-vous d'importer correctement votre composant NavLink
 
 function Sidebar() {
     return (
@@ -17,33 +17,31 @@ function Sidebar() {
                 <p className=' text-white/50'>
                     Overview
                 </p>
-                <Link to={"/"} className=' flex items-center gap-1 text-white w-full rounded hover:cursor-pointer bg-primary p-2'>
-                    <IoApps />
-                    <span> Dashboard</span>
-                </Link>
+                <NavLink to="/" icon={IoApps}>
+                    Dashboard
+                </NavLink>
                 <Separator />
                 <div className="flex flex-col gap-5">
                     <p className=' text-white/50'>
                         Gestion de fichier
                     </p>
-                    <Link to={"/doc"} className=' flex items-center gap-1 hover:bg-amber-500/10 text-white w-full rounded hover:cursor-pointer  p-2'>
-                        <IoDocumentAttach />
-                        <span> Documents</span>
-                    </Link>
+                    <NavLink to="/doc" icon={IoDocumentAttach}>
+                        Documents
+                    </NavLink>
                 </div>
                 <Separator />
                 <div className="flex flex-col gap-5">
                     <p className=' text-white/50'>
                         Gestion des utilisateurs
                     </p>
-                    <Link to={"/personnel"} className=' flex items-center gap-1 hover:bg-amber-500/10 text-white w-full rounded hover:cursor-pointer  p-2'>
-                        <LuUsers2 />
-                        <span> Personnel</span>
-                    </Link>
+                    <NavLink to="/personnel" icon={LuUsers2}>
+                        Personnel
+                    </NavLink>
                 </div>
             </ul>
         </div>
-    )
+    );
 }
 
 export default Sidebar
+

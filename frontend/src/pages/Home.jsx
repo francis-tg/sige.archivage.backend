@@ -1,16 +1,39 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import Cards from '../components/fragments/Cards'
 import { LuUploadCloud } from 'react-icons/lu'
+import { Link } from 'react-router-dom'
 
 function Home() {
+  const [selectedFiles, setSelectedFiles] = useState([])
+
   const onDrop = useCallback(acceptedFiles => {
-    // Do something with the files
+    setSelectedFiles(acceptedFiles)
     console.log(acceptedFiles)
   }, [])
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'application/pdf': ['.pdf'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+      'application/msword': ['.doc'],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+      'text/csv': ['.csv'],
+      'application/vnd.ms-excel': ['.xls'],
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
+      'application/vnd.ms-powerpoint': ['.ppt'],
+    }
+  })
+
   return (
     <div className='flex flex-col flex-grow py-2'>
+      <div className="breadcrumbs text-sm">
+        <ul>
+          <li><Link to={"/"}>Sige Archive</Link></li>
+          <li>Tableau de bord</li>
+        </ul>
+      </div>
       <div className='flex items-end flex-grow justify-end mb-3'>
         <button onClick={() => document.getElementById('uploadFile').showModal()} className="btn bg-primary text-white hover:bg-primary">
           <LuUploadCloud />
@@ -37,7 +60,7 @@ function Home() {
                     (
                       <div className='flex items-center flex-col justify-center'>
                         <div>
-                          Documents acceptées <span className='font-bold'>(.pdf,.docs,.xlsx,.csv,.ppt)</span>
+                          Documents acceptés <span className='font-bold'>(.pdf, .doc, .docx, .xlsx, .csv, .xls, .ppt, .pptx)</span>
                         </div>
                         <p>
                           Glisser et déposer vos documents ici
@@ -48,6 +71,16 @@ function Home() {
                 }
               </div>
             </div>
+            {selectedFiles.length > 0 && (
+              <div className='mt-4'>
+                <h4 className='font-bold'>Fichiers sélectionnés:</h4>
+                <ul>
+                  {selectedFiles.map((file, index) => (
+                    <li key={index}>{file.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
           <div className='flex flex-col md:flex-row items-center gap-3'>
             <div>
@@ -91,7 +124,6 @@ function Home() {
             <button className='btn bg-primary hover:bg-primary text-white'>
               Archiver maintenant
             </button>
-
           </div>
         </div>
       </dialog>

@@ -41,7 +41,7 @@ function MainLayout() {
                 <div className="w-full">
                     <Navbar toggleSidebar={()=>toggleSidebar()}/>
                 </div>
-                <div className="flex w-full bg-gray-100 px-8 h-full items-start justify-start">
+                <div className="flex flex-grow w-full bg-gray-100 px-8 h-full items-start justify-start">
                    <Outlet />
                 </div>
             </div>
