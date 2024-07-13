@@ -28,7 +28,6 @@ class AuthController extends Controller
         }
         return $this->respondWithToken($token);
     }
-    //}
 
     public function logout(Request $request)
     {
@@ -50,22 +49,37 @@ class AuthController extends Controller
             $personnel = Auth::user();
             $token = JWTAuth::fromUser($personnel);
 
+            // Retrieve the role for the personnel
+            $role = $personnel->roles()->pluck('name')->first();
+
             return response()->json([
                 'message' => 'Authentification réussie',
                 'token' => $token,
+                'role' => $role, // Inject the role into the response
                 'personnel' => $personnel,
             ], 200);
         } else {
             return response()->json(['message' => 'Identifiants incorrects'], 401);
         }
     }
-    public function me(){
-        return response()->json(["user"=>auth("api")->user(),"token"=>JWTAuth::refresh()]);
+
+    public function me()
+    {
+        $personnel = auth("api")->user();
+        $role = $personnel->roles()->pluck('name')->first();
+
+        return response()->json([
+            'user' => $personnel,
+            'role' => $role,
+            'token' => JWTAuth::refresh(),
+        ]);
     }
+
     public function refresh()
     {
         return $this->respondWithToken(JWTAuth::refresh());
     }
+
     protected function respondWithToken($token)
     {
         return response()->json([

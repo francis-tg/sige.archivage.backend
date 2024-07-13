@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id()->primary()->autoIncrement();
             $table->string('label');
+            $table->string('acreditation');
             $table->timestamps();
         });
     }

@@ -5,9 +5,7 @@ use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PersonnelController;
-use App\Http\Controllers\PersRoleController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\RolePermissionController;
 use App\Http\Middleware\AuthPersonnelMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -40,16 +38,12 @@ Route::post('/categories', [CategorieController::class, 'store']);
 Route::get('/categories/{id_cat}', [CategorieController::class, 'show']);
 Route::put('/categories/{id_cat}', [CategorieController::class, 'update']);
 Route::delete('/categories/{id_cat}', [CategorieController::class, 'destroy']);
-
-
 //Consultation
 Route::get('/consultations', [ConsultationController::class, 'index']);
 Route::post('/consultations', [ConsultationController::class, 'store']);
 Route::get('/consultations/{code_pers}/{doc_id}', [ConsultationController::class, 'show']);
 Route::put('/consultations/{code_pers}/{doc_id}', [ConsultationController::class, 'update']);
 Route::delete('/consultations/{code_pers}/{doc_id}', [ConsultationController::class, 'destroy']);
-
-
 //Documents
 Route::get('/documents', [DocumentController::class, 'index']);
 Route::post('/documents', [DocumentController::class, 'store']);
@@ -65,14 +59,6 @@ Route::get('/personnels/{code_pers}', [PersonnelController::class, 'show']);
 Route::put('/personnels/{code_pers}', [PersonnelController::class, 'update']);
 Route::delete('/personnels/{code_pers}', [PersonnelController::class, 'destroy']);
 
-
-//Pers-Role
-Route::get('/pers-roles', [PersRoleController::class, 'index']);
-Route::post('/pers-roles', [PersRoleController::class, 'store']);
-Route::get('/pers-roles/{id}', [PersRoleController::class, 'show']);
-Route::put('/pers-roles/{id}', [PersRoleController::class, 'update']);
-Route::delete('/pers-roles/{id}', [PersRoleController::class, 'destroy']);
-
 //Roles
 Route::get('/roles', [RoleController::class, 'index']);
 Route::post('/roles', [RoleController::class, 'store']);
@@ -80,10 +66,3 @@ Route::get('/roles/{code_role}', [RoleController::class, 'show']);
 Route::put('/roles/{code_role}', [RoleController::class, 'update']);
 Route::delete('/roles/{code_role}', [RoleController::class, 'destroy']);
 
-
-//Role-Permission
-Route::get('/role-permissions', [RolePermissionController::class, 'index']);
-Route::post('/role-permissions', [RolePermissionController::class, 'store']);
-Route::get('/role-permissions/{code_permis}', [RolePermissionController::class, 'show']);
-Route::put('/role-permissions/{code_permis}', [RolePermissionController::class, 'update']);
-Route::delete('/role-permissions/{code_permis}', [RolePermissionController::class, 'destroy']);

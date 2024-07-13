@@ -9,17 +9,19 @@ use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
 {
-    public function index(){
-        $docs = Document::all();
-        return response()->json($docs,200);
+    public function index()
+    {
+        $docs = Document::with('user', 'category')->get(); // Inclure les relations User et Category
+        return response()->json($docs, 200);
     }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'category_id' => 'required|integer',
+            'category_id' => 'required|integer|exists:categories,id',
             'titre' => 'required|string|max:255',
             'auteur' => 'required|string|max:255',
             'type' => 'required|string|max:255',
@@ -39,58 +41,55 @@ class DocumentController extends Controller
             $validatedData['file_path'] = $path;
         }
 
-        // Créez un nouveau document
-        $document = Document::create($validatedData);
-
-        // Logique supplémentaire si nécessaire
-
-        return response()->json(['message' => 'Document créé avec succès', 'document' => $document], 201);
+        try {
+            DB::beginTransaction();
+            // Créez un nouveau document
+            $document = Document::create($validatedData);
+            DB::commit();
+            return response()->json(['message' => 'Document créé avec succès', 'document' => $document], 201);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return response()->json(['error' => "Erreur d'enregistrement: " . $th->getMessage()], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $doc_id)
+    public function show(int $doc_id)
     {
-        $document = Document::findOrFail($doc_id);
+        $document = Document::with('user', 'category')->findOrFail($doc_id); // Inclure les relations User et Category
         return response()->json($document, 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $doc_id)
+    public function update(Request $request, int $doc_id)
     {
         $validatedData = $request->validate([
-            'label_div' => 'required|string|max:255',
-            'id_cat' => 'required|integer',
-            'code_bureau' => 'required|string|max:255',
+            'category_id' => 'required|integer|exists:categories,id',
             'titre' => 'required|string|max:255',
             'auteur' => 'required|string|max:255',
-            'date_creation' => 'required|date',
-            'date_der_mod' => 'required|date',
             'type' => 'required|string|max:255',
-            'resumé' => 'required|string',
+            'resume' => 'required|string',
             'reference' => 'required|string|max:255',
-            'emplacement_doc' => 'required|string|max:255',
             'status_doc' => 'required|string|max:255',
             'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048' // Adjust the file types and size as needed
         ]);
-        
+
         try {
             $document = Document::findOrFail($doc_id);
 
             if ($request->hasFile('file')) {
                 // Delete old file if exists
                 if ($document->file_path) {
-                    Storage::disk('public')->delete($document->file_path);
+                    Storage::delete($document->file_path);
                 }
 
                 $file = $request->file('file');
-                $filePath = $file->store('documents', 'public');
+                $filePath = $file->store('documents');
                 $validatedData['file_path'] = $filePath;
-                $validatedData['file_type'] = $file->getClientMimeType();
-                $validatedData['file_size'] = $file->getSize();
             }
 
             $document->update($validatedData);
@@ -98,6 +97,28 @@ class DocumentController extends Controller
             return response()->json($document, 200);
         } catch (\Throwable $th) {
             return response()->json(['error' => 'Erreur de mise à jour: ' . $th->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(int $doc_id)
+    {
+        try {
+            DB::beginTransaction();
+            $document = Document::findOrFail($doc_id);
+
+            if ($document->file_path) {
+                Storage::delete($document->file_path);
+            }
+
+            $document->delete();
+            DB::commit();
+            return response()->json(['message' => 'Document supprimé avec succès'], 200);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return response()->json(['error' => "Erreur de suppression: " . $th->getMessage()], 500);
         }
     }
 }

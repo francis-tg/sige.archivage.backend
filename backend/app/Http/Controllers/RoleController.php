@@ -31,8 +31,8 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'label_role' => 'requirerequired',
-            'acreditation_role' => 'required'
+            'label' => 'requirerequired',
+            'acreditation' => 'required'
 
         ]);
         try {

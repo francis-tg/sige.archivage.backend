@@ -31,34 +31,33 @@ class BureauController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'label_div' => 'required',
-            'desc_div'  => 'required',
-            'type_bureau' => 'required'
+            'name' => 'required|string|max:255',
         ]);
+
         try {
             DB::beginTransaction();
-            $bureaux = Bureau::create($request->all());
+            $bureau = Bureau::create($validatedData);
             DB::commit();
-            return response()->json($bureaux, 200);
+            return response()->json($bureau, 201);
         } catch (\Throwable $th) {
             DB::rollback();
-            return response()->json('{"error":"Erreur d\'enregistrement "}' . $th, 500);
+            return response()->json(['error' => "Erreur d'enregistrement: " . $th->getMessage()], 500);
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $code_bureau)
+    public function show(int $id)
     {
-        $bureaux = Bureau::findOrFail($code_bureau);
-        return response()->json($bureaux, 200);
+        $bureau = Bureau::findOrFail($id);
+        return response()->json($bureau, 200);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(int $id)
     {
         //
     }
@@ -66,25 +65,30 @@ class BureauController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $code_bureau)
+    public function update(Request $request, int $id)
     {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
         try {
-            $res = Bureau::find($code_bureau)->update($request->all());
-            return response()->json($res, 200);
+            $bureau = Bureau::findOrFail($id);
+            $bureau->update($validatedData);
+            return response()->json($bureau, 200);
         } catch (\Throwable $th) {
-            return response()->json($th, 500);
+            return response()->json(['error' => "Erreur de mise à jour: " . $th->getMessage()], 500);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $code_bureau)
+    public function destroy(int $id)
     {
         try {
             DB::beginTransaction();
-            $bureaux = Bureau::findOrFail($code_bureau);
-            $bureaux->delete();
+            $bureau = Bureau::findOrFail($id);
+            $bureau->delete();
             DB::commit();
             return response()->json(['message' => 'Bureau supprimé avec succès'], 200);
         } catch (\Throwable $th) {

@@ -16,17 +16,17 @@ class RoleSeeder extends Seeder
     {
         Role::create([
             'label' => 'Administrator',
-            'acreditation_role' => 'Full Access',
+            'acreditation' => 'Full Access',
         ]);
 
         Role::create([
-            'label_role' => 'Editor',
-            'acreditation_role' => 'Edit Access',
+            'label' => 'Editor',
+            'acreditation' => 'Edit Access',
         ]);
 
         Role::create([
-            'label_role' => 'Viewer',
-            'acreditation_role' => 'View Only',
+            'label' => 'Viewer',
+            'acreditation' => 'View Only',
         ]);
 
         // Add more roles as needed

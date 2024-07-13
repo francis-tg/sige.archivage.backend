@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Consultation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 class ConsultationController extends Controller
 {
     /**

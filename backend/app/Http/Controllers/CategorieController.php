@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categorie;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,8 +13,8 @@ class CategorieController extends Controller
      */
     public function index()
     {
-        $categorie = Category::all();
-        return response()->json($categorie, 200);
+        $categories = Category::all();
+        return response()->json($categories, 200);
     }
 
     /**
@@ -32,23 +31,24 @@ class CategorieController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'label_cat'  => 'required',
+            'label' => 'required|string|max:255',
         ]);
+
         try {
             DB::beginTransaction();
-            $categorie = Category::create($request->all());
+            $categorie = Category::create($validatedData);
             DB::commit();
-            return response()->json($categorie, 200);
+            return response()->json($categorie, 201);
         } catch (\Throwable $th) {
             DB::rollback();
-            return response()->json('{"error":"Erreur d\'enregistrement "}' . $th, 500);
+            return response()->json(['error' => "Erreur d'enregistrement: " . $th->getMessage()], 500);
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id_cat)
+    public function show(int $id_cat)
     {
         $categorie = Category::findOrFail($id_cat);
         return response()->json($categorie, 200);
@@ -57,7 +57,7 @@ class CategorieController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(int $id)
     {
         //
     }
@@ -65,27 +65,32 @@ class CategorieController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id_cat)
+    public function update(Request $request, int $id_cat)
     {
+        $validatedData = $request->validate([
+            'label' => 'required|string|max:255',
+        ]);
+
         try {
-            $res = Category::find($id_cat)->update($request->all());
-            return response()->json($res, 200);
+            $categorie = Category::findOrFail($id_cat);
+            $categorie->update($validatedData);
+            return response()->json($categorie, 200);
         } catch (\Throwable $th) {
-            return response()->json($th, 500);
+            return response()->json(['error' => "Erreur de mise à jour: " . $th->getMessage()], 500);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id_cat)
+    public function destroy(int $id_cat)
     {
         try {
             DB::beginTransaction();
             $categorie = Category::findOrFail($id_cat);
             $categorie->delete();
             DB::commit();
-            return response()->json(['message' => 'Categories supprimé avec succès'], 200);
+            return response()->json(['message' => 'Catégorie supprimée avec succès'], 200);
         } catch (\Throwable $th) {
             DB::rollback();
             return response()->json(['error' => "Erreur de suppression: " . $th->getMessage()], 500);
