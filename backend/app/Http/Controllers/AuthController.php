@@ -66,7 +66,7 @@ class AuthController extends Controller
     public function me()
     {
         $personnel = auth("api")->user();
-        $role = $personnel->roles()->pluck('name')->first();
+        $role = $personnel->roles()->pluck('label')->first();
 
         return response()->json([
             'user' => $personnel,
