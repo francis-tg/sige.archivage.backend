@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePersonnelsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,11 +15,10 @@ class CreatePersonnelsTable extends Migration
     {
         Schema::create('personnels', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bureau_id')->constrained()->onDelete('cascade');
+            $table->foreignId('bureau_id')->constrained('bureaux')->onDelete('cascade');
             $table->string('nom');
             $table->string('prenom');
             $table->string('email')->unique();
-            $table->string('telephone');
             $table->timestamps();
         });
     }
@@ -33,4 +32,4 @@ class CreatePersonnelsTable extends Migration
     {
         Schema::dropIfExists('personnels');
     }
-}
+};

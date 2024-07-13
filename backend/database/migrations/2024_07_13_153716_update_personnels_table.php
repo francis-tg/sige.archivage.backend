@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdatePersonnelsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -22,7 +22,6 @@ class UpdatePersonnelsTable extends Migration
             $table->string('first_phone');
             $table->string('second_phone')->nullable();
             $table->string('cni');
-            $table->string('email')->unique();
             $table->string('photo')->nullable();
             $table->string('lang')->nullable();
             $table->text('bibliographie')->nullable();
@@ -54,4 +53,4 @@ class UpdatePersonnelsTable extends Migration
             ]);
         });
     }
-}
+};

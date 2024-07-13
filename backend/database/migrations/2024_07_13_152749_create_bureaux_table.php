@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBureauxTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateBureauxTable extends Migration
     public function up()
     {
         Schema::create('bureaux', function (Blueprint $table) {
-            $table->id()->autoIncrement()->primary();
+            $table->id();
             $table->string('name');
             $table->timestamps();
         });
@@ -29,4 +29,4 @@ class CreateBureauxTable extends Migration
     {
         Schema::dropIfExists('bureaux');
     }
-}
+};
