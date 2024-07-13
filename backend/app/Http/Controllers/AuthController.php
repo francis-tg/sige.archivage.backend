@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Personnel;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -17,24 +18,26 @@ class AuthController extends Controller
     public function authenticate(Request $request)
     {
         $validatedData = $request->validate([
-            'login_pers' => 'required|string',
-            'pwd_pers' => 'required|string',
+            'email' => 'required|string',
+            'password' => 'required|string',
         ]);
-
-        $personnel = Personnel::where('login_pers', $validatedData['login_pers'])->first();
-
-        if (!$personnel || !Hash::check($validatedData['pwd_pers'], $personnel->pwd_pers)) {
-            return response()->json(['message' => 'Identifiants incorrects'], 401);
+        $admin_cred = request(["email", 'password']);
+        $token = auth('api')->attempt($admin_cred);
+        if (!$token) {
+            # code...
+            return response()->json(['message' => 'Identifiants incorrects',], 401);
         }
-
-        // Generate JWT token
-        $token = JWTAuth::fromUser($personnel);
-
         return response()->json([
             'message' => 'Authentification réussie',
             'token' => $token,
-            'personnel' => $personnel,
         ], 200);
+    }
+    //}
+
+    public function logout(Request $request)
+    {
+        auth("api")->logout();
+        return response()->json(["message" => "Déauthentification réussie"]);
     }
 
     /**
@@ -59,5 +62,8 @@ class AuthController extends Controller
         } else {
             return response()->json(['message' => 'Identifiants incorrects'], 401);
         }
+    }
+    public function me(){
+        return response()->json(auth("api")->user());
     }
 }

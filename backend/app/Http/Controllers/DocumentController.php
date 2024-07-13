@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
 {
+    public function index(){
+        $docs = Document::all();
+        return response()->json($docs,200);
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -32,7 +36,6 @@ class DocumentController extends Controller
 
         try {
             DB::beginTransaction();
-
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $filePath = $file->store('documents', 'public');
@@ -80,7 +83,7 @@ class DocumentController extends Controller
             'status_doc' => 'required|string|max:255',
             'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048' // Adjust the file types and size as needed
         ]);
-
+        
         try {
             $document = Document::findOrFail($doc_id);
 

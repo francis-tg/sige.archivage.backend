@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'name' => 'John Doe',
             'email' => 'admin@sige.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('password'), // Use Hash::make to hash the password
+            'password' => bcrypt('password'), // Use Hash::make to hash the password
             'remember_token' => null,
         ]);
     }
