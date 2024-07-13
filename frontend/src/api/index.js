@@ -80,3 +80,21 @@ export const CREATE_PERSONNEL_API = {
         "Content-Type": "application/json"
     }
 }
+
+export const GET_CATEGORIE_API = {
+    url: `${BASE_URL}/categories`,
+    method: "GET",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+    }
+}
+
+
+export const CREATE_CATEGORIE_API = {
+    url: `${BASE_URL}/categories`,
+    method: "POST",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+    }
+}
