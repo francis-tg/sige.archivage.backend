@@ -18,19 +18,15 @@ class AuthController extends Controller
     public function authenticate(Request $request)
     {
         $validatedData = $request->validate([
-            'email' => 'required|string',
+            'login' => 'required|string',
             'password' => 'required|string',
         ]);
-        $admin_cred = request(["email", 'password']);
+        $admin_cred = ['email' => $validatedData['login'], 'password' => $validatedData['password']];
         $token = auth('api')->attempt($admin_cred);
         if (!$token) {
-            # code...
-            return response()->json(['message' => 'Identifiants incorrects',], 401);
+            return response()->json(['message' => 'Identifiants incorrects'], 401);
         }
-        return response()->json([
-            'message' => 'Authentification réussie',
-            'token' => $token,
-        ], 200);
+        return $this->respondWithToken($token);
     }
     //}
 
@@ -64,6 +60,18 @@ class AuthController extends Controller
         }
     }
     public function me(){
-        return response()->json(auth("api")->user());
+        return response()->json(["user"=>auth("api")->user(),"token"=>JWTAuth::refresh()]);
+    }
+    public function refresh()
+    {
+        return $this->respondWithToken(JWTAuth::refresh());
+    }
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => JWTAuth::factory()->getTTL() * 60
+        ]);
     }
 }
