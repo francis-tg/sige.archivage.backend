@@ -8,29 +8,44 @@ use Illuminate\Database\Eloquent\Model;
 class Personnel extends Model
 {
     use HasFactory;
-    protected $table = 'personnel';
-    protected $primaryKey = 'code_pers';
-    public $incrementing = false;
-    public $timestamp = true;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'code_pers',
-        'nom_pers',
-        'prenom_pers',
-        'sexe_pers',
-        'date_naissance_pers',
-        'lieu_naissance_pers',
-        'statut_mat_pers',
-        'lieu_residence_pers',
-        'first_phone_pers',
-        'second_phone_pers',
-        'cni_pers',
-        'email_pers',
-        'login_pers',
-        'pwd_pers',
-        'photo_pers',
-        'lang_pers',
-        'bibliographie_pers',
-        'nb_enfant_pers',
+        'bureau_id',
+        'user_id',
+        'nom',
+        'prenom',
+        'sexe',
+        'date_naissance',
+        'lieu_naissance',
+        'statut_mat',
+        'lieu_residence',
+        'first_phone',
+        'second_phone',
+        'cni',
+        'photo',
+        'lang',
+        'bibliographie',
+        'nb_enfant',
     ];
+
+    /**
+     * Get the bureau that the personnel belongs to.
+     */
+    public function bureau()
+    {
+        return $this->belongsTo(Bureau::class);
+    }
+
+    /**
+     * Get the user that the personnel belongs to.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

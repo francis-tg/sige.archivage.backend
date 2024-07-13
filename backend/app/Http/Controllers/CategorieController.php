@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categorie;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +14,7 @@ class CategorieController extends Controller
      */
     public function index()
     {
-        $categorie = Categorie::all();
+        $categorie = Category::all();
         return response()->json($categorie, 200);
     }
 
@@ -35,7 +36,7 @@ class CategorieController extends Controller
         ]);
         try {
             DB::beginTransaction();
-            $categorie = Categorie::create($request->all());
+            $categorie = Category::create($request->all());
             DB::commit();
             return response()->json($categorie, 200);
         } catch (\Throwable $th) {
@@ -49,7 +50,7 @@ class CategorieController extends Controller
      */
     public function show(string $id_cat)
     {
-        $categorie = Categorie::findOrFail($id_cat);
+        $categorie = Category::findOrFail($id_cat);
         return response()->json($categorie, 200);
     }
 
@@ -67,7 +68,7 @@ class CategorieController extends Controller
     public function update(Request $request, string $id_cat)
     {
         try {
-            $res = Categorie::find($id_cat)->update($request->all());
+            $res = Category::find($id_cat)->update($request->all());
             return response()->json($res, 200);
         } catch (\Throwable $th) {
             return response()->json($th, 500);
@@ -81,7 +82,7 @@ class CategorieController extends Controller
     {
         try {
             DB::beginTransaction();
-            $categorie = Categorie::findOrFail($id_cat);
+            $categorie = Category::findOrFail($id_cat);
             $categorie->delete();
             DB::commit();
             return response()->json(['message' => 'Categories supprimé avec succès'], 200);

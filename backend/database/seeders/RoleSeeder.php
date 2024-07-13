@@ -15,7 +15,7 @@ class RoleSeeder extends Seeder
     public function run()
     {
         Role::create([
-            'label_role' => 'Administrator',
+            'label' => 'Administrator',
             'acreditation_role' => 'Full Access',
         ]);
 

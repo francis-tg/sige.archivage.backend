@@ -19,39 +19,32 @@ class DocumentController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'label_div' => 'required|string|max:255',
-            'id_cat' => 'required|integer',
-            'code_bureau' => 'required|string|max:255',
+            'category_id' => 'required|integer',
             'titre' => 'required|string|max:255',
             'auteur' => 'required|string|max:255',
-            'date_creation' => 'required|date',
-            'date_der_mod' => 'required|date',
             'type' => 'required|string|max:255',
-            'resumé' => 'required|string',
+            'resume' => 'required|string',
             'reference' => 'required|string|max:255',
-            'emplacement_doc' => 'required|string|max:255',
             'status_doc' => 'required|string|max:255',
-            'file' => 'required|file|mimes:pdf,doc,docx|max:2048' // Adjust the file types and size as needed
+            'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048', // Adjust the file types and size as needed
         ]);
 
-        try {
-            DB::beginTransaction();
-            if ($request->hasFile('file')) {
-                $file = $request->file('file');
-                $filePath = $file->store('documents', 'public');
-                $validatedData['file_path'] = $filePath;
-                $validatedData['file_type'] = $file->getClientMimeType();
-                $validatedData['file_size'] = $file->getSize();
-            }
+        // Ajoutez l'ID de l'utilisateur actuellement authentifié
+        $validatedData['user_id'] = auth('api')->id();
 
-            $document = Document::create($validatedData);
-
-            DB::commit();
-            return response()->json($document, 200);
-        } catch (\Throwable $th) {
-            DB::rollback();
-            return response()->json(['error' => 'Erreur d\'enregistrement: ' . $th->getMessage()], 500);
+        // Gérez le téléchargement de fichier si présent
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $path = $file->store('documents'); // Stockez le fichier dans le répertoire storage/app/documents
+            $validatedData['file_path'] = $path;
         }
+
+        // Créez un nouveau document
+        $document = Document::create($validatedData);
+
+        // Logique supplémentaire si nécessaire
+
+        return response()->json(['message' => 'Document créé avec succès', 'document' => $document], 201);
     }
 
     /**

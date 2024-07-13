@@ -8,25 +8,37 @@ use Illuminate\Database\Eloquent\Model;
 class Document extends Model
 {
     use HasFactory;
-    protected $table = 'document';
-    protected $primaryKey = 'doc_id';
-    public $incrementing = true;
-    public $timestamp = true;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'doc_id',
-        'id_cat',
-        'code_bureau',
+        'user_id',
+        'category_id',
         'titre',
         'auteur',
-        'date_creation',
-        'date_der_mod',
         'type',
-        'resumé',
+        'resume',
         'reference',
-        'emplacement_doc',
         'status_doc',
-        'file',
-        'taille'
+        'file_path',
     ];
+
+    /**
+     * Get the user that owns the document.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the category that owns the document.
+     */
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

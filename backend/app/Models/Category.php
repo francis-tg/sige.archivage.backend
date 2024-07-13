@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Category extends Model
 {
     use HasFactory;
 
@@ -16,14 +16,6 @@ class Role extends Model
      */
     protected $fillable = [
         'label',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
+        // Add other fillable fields here as needed
     ];
 }

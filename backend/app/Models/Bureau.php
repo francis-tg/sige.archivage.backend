@@ -8,15 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Bureau extends Model
 {
     use HasFactory;
-    protected $table = 'bureau';
-    protected $primaryKey = 'code_bureau';
-    public $incrementing = false;
-    public $timestamp = true;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'code_bureau',
-        'label_div',
-        'desc_div',
-        'type_bureau'
+        'nom',
     ];
 }

@@ -4,7 +4,6 @@ use App\Http\Controllers\BureauController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\PersRoleController;
 use App\Http\Controllers\RoleController;
@@ -58,13 +57,6 @@ Route::get('/documents/{doc_id}', [DocumentController::class, 'show']);
 Route::put('/documents/{doc_id}', [DocumentController::class, 'update']);
 Route::delete('/documents/{doc_id}', [DocumentController::class, 'destroy']);
 
-
-//Permission
-Route::get('/permissions', [PermissionController::class, 'index']);
-Route::post('/permissions', [PermissionController::class, 'store']);
-Route::get('/permissions/{code_permis}', [PermissionController::class, 'show']);
-Route::put('/permissions/{code_permis}', [PermissionController::class, 'update']);
-Route::delete('/permissions/{code_permis}', [PermissionController::class, 'destroy']);
 
 //Personnels
 Route::get('/personnels', [PersonnelController::class, 'index']);

@@ -5,17 +5,33 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Consultation extends Model
+class DocumentView extends Model
 {
     use HasFactory;
-    protected $table = 'consultation';
-    protected $primaryKey = ['code_pers', 'doc_id'];
-    public $incrementing = true;
-    public $timestamp = true;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'code_pers',
-        'doc_id',
-        'date_consultation'
+        'user_id',
+        'document_id',
     ];
+
+    /**
+     * Get the user that viewed the document.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the document that was viewed.
+     */
+    public function document()
+    {
+        return $this->belongsTo(Document::class);
+    }
 }
