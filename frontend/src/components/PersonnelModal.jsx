@@ -1,133 +1,168 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getRoles } from '../api/routes/role';
+import { getBureaux } from '../api/routes/bureau';
+import { createPersonnel } from '../api/routes/personnel';
 
-function PersonnelModal({ isOpen, onClose, onSubmit }) {
-  const [formData, setFormData] = useState({
-    code_pers: '',
-    nom_pers: '',
-    prenom_pers: '',
-    sexe_pers: '',
-    date_naissance_pers: '',
-    lieu_naissance_pers: '',
-    statut_matrimonial_pers: '',
-    lieu_residence_pers: '',
-    premier_telephone_pers: '',
-    deuxieme_telephone_pers: '',
-    numero_cni_pers: '',
-    email_pers: '',
-    login_pers: '',
-    mot_de_passe_pers: '',
-    photo_pers: '',
-    langue_pers: '',
-    bibliographie_pers: '',
-    nombre_enfants_pers: '',
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
+function PersonnelModal({ isOpen, onClose, onSaveSuccess }) {
+    const [formData, setFormData] = useState({
+        nom_pers: '',
+        prenom_pers: '',
+        email_pers: '',
+        role_id: '',
+        bureau_id: '', // Assuming bureau_id is also needed for Personnel creation
     });
-  };
+    const [Roles, setRoles] = useState([])
+    const [Bureaux, setBureaux] = useState([])
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
 
-  if (!isOpen) return null;
+    function fetchRole() {
+        getRoles().then(async function (res) {
+            if (res.status === 200) {
+                const data = await res.json()
+                setRoles(data)
+            }
+        }).catch(function (err) {
+            console.log(err)
+        })
+    }
+    function fetchBureau() {
+        getBureaux().then(async function (res) {
+            if (res.status === 200) {
+                const data = await res.json()
+                setBureaux(data)
+            }
+        }).catch(function (err) {
+            console.log(err)
+        })
+    }
 
-  return (
-    <div className="modal modal-open">
-      <div className="modal-box">
-        <h2 className="font-bold text-lg">Ajouter Personnel</h2>
-        <form onSubmit={handleSubmit}>
-          {Object.keys(formData).map((key) => (
-            <div key={key} className="form-control">
-              <label className="label">
-                <span className="label-text">{getFieldLabel(key)}</span>
-              </label>
-              <input
-                type={getFieldType(key)}
-                name={key}
-                value={formData[key]}
-                onChange={handleChange}
-                className="input input-bordered"
-                placeholder={`Entrer ${getFieldLabel(key)}`}
-              />
+    useEffect(() => {
+        fetchRole()
+        fetchBureau()
+        return () => {
+            fetchRole()
+            fetchBureau()
+        }
+    },)
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await createPersonnel(formData)
+            if (response.status ===201) {
+                const data = await response.json()
+                onSaveSuccess(data); // Assuming response.data contains the saved personnel data
+                onClose(); // Close the modal on successful save
+            }
+        } catch (error) {
+            console.error('Erreur lors de la sauvegarde du personnel:', error);
+            // Handle error state or feedback to user
+        }
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="modal modal-open">
+            <div className="modal-box">
+                <h2 className="font-bold text-lg">Ajouter Personnel</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text">Nom</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="nom_pers"
+                            value={formData.nom_pers}
+                            onChange={handleChange}
+                            className="input input-bordered"
+                            placeholder="Entrer le nom"
+                            required
+                        />
+                    </div>
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text">Prénom</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="prenom_pers"
+                            value={formData.prenom_pers}
+                            onChange={handleChange}
+                            className="input input-bordered"
+                            placeholder="Entrer le prénom"
+                            required
+                        />
+                    </div>
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text">Email</span>
+                        </label>
+                        <input
+                            type="email"
+                            name="email_pers"
+                            value={formData.email_pers}
+                            onChange={handleChange}
+                            className="input input-bordered"
+                            placeholder="Entrer l'email"
+                            required
+                        />
+                    </div>
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text">Rôle</span>
+                        </label>
+                        <select
+                            name="role_id"
+                            value={formData.role_id}
+                            onChange={handleChange}
+                            className="select select-bordered"
+                            required
+                        >
+                            <option value="">Sélectionner un rôle</option>
+                            {Roles.map((role)=>(
+                                <option value={role?.id}>{role?.label}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text">Bureau ID</span>
+                        </label>
+                        <select
+                            name="bureau_id"
+                            value={formData.bureau_id}
+                            onChange={handleChange}
+                            className="select select-bordered"
+                            required
+                        >
+                            <option value="">Sélectionner un bureau</option>
+                            {Bureaux.map((bureau)=>(
+                                <option value={bureau?.id}>{bureau?.nom}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="modal-action">
+                        <button type="button" className="btn" onClick={onClose}>
+                            Annuler
+                        </button>
+                        <button type="submit" className="btn btn-primary">
+                            Sauvegarder
+                        </button>
+                    </div>
+                </form>
             </div>
-          ))}
-          <div className="modal-action">
-            <button type="button" className="btn" onClick={onClose}>
-              Annuler
-            </button>
-            <button type="submit" className="btn btn-primary">
-              Soumettre
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-function getFieldLabel(key) {
-  switch (key) {
-    case 'code_pers':
-      return 'Code Personnel';
-    case 'nom_pers':
-      return 'Nom';
-    case 'prenom_pers':
-      return 'Prénom';
-    case 'sexe_pers':
-      return 'Sexe';
-    case 'date_naissance_pers':
-      return 'Date de Naissance';
-    case 'lieu_naissance_pers':
-      return 'Lieu de Naissance';
-    case 'statut_matrimonial_pers':
-      return 'Statut Matrimonial';
-    case 'lieu_residence_pers':
-      return 'Lieu de Résidence';
-    case 'premier_telephone_pers':
-      return 'Premier Téléphone';
-    case 'deuxieme_telephone_pers':
-      return 'Deuxième Téléphone';
-    case 'numero_cni_pers':
-      return 'Numéro CNI';
-    case 'email_pers':
-      return 'Email';
-    case 'login_pers':
-      return 'Login';
-    case 'mot_de_passe_pers':
-      return 'Mot de Passe';
-    case 'photo_pers':
-      return 'Photo';
-    case 'langue_pers':
-      return 'Langue';
-    case 'bibliographie_pers':
-      return 'Bibliographie';
-    case 'nombre_enfants_pers':
-      return 'Nombre d\'Enfants';
-    default:
-      return key;
-  }
-}
-
-function getFieldType(key) {
-  if (key.includes('date')) {
-    return 'date';
-  } else if (key.includes('email')) {
-    return 'email';
-  } else if (key.includes('telephone')) {
-    return 'tel'; // ou 'text' en fonction de vos besoins de validation
-  } else if (key.includes('mot_de_passe')) {
-    return 'password';
-  } else if (key.includes('nombre_enfants')) {
-    return 'number';
-  } else {
-    return 'text';
-  }
+        </div>
+    );
 }
 
 export default PersonnelModal;
