@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Link } from 'react-router-dom';
 import { FaFilePdf, FaFileWord, FaFileExcel, FaFilePowerpoint, FaFile } from 'react-icons/fa6';
-import { IoApps, IoList } from 'react-icons/io5';
 import { getCategorieById } from '../api/routes/categorie';
+import DocumentList from '../components/DocumentList';
+import DocumentGrid from '../components/DocumentGrid';
+import ViewToggleButtons from '../components/ViewToggleButtons';
+import Breadcrumbs from '../components/Breadcrumbs';
+import Pagination from '../components/Pagination';
 function OpenFolder() {
     const {id} = useParams()
     const [documents, setDocuments] = useState([]);
     const [categorie, setCategorie] = useState({});
     const [view,setView] = useState('grid')
+    const [currentPage, setCurrentPage] = useState(1);
+    const documentsPerPage = 10;
     const fetchDocuments = () => {
         getCategorieById(id)
             .then(async (res) => {
@@ -44,84 +49,25 @@ function OpenFolder() {
                 return <FaFile />;
         }
     };
+    const indexOfLastDocument = currentPage * documentsPerPage;
+  const indexOfFirstDocument = indexOfLastDocument - documentsPerPage;
+  const currentDocuments = documents.slice(indexOfFirstDocument, indexOfLastDocument);
 
     return (
         <div className='w-full'>
-            <div className="breadcrumbs text-sm">
-                <ul>
-                    <li><Link to="/">Sige Archive</Link></li>
-                    <li ><span className='text-primary'>{categorie?.label}</span></li>
-                </ul>
-            </div>
-            <div className='flex items-end justify-end'>
-                <div>
-                    <button onClick={function(){setView('grid')}} className={view==="grid"?'btn btn-sm btn-ghost bg-amber-500/50':'btn btn-sm btn-ghost'}>
-                    <IoApps/>
-                    </button>
-                    <button onClick={function(){setView('list')}} className={view==="list"?'btn btn-sm btn-ghost bg-amber-500/50':'btn btn-sm btn-ghost'}>
-                    <IoList/>
-                    </button>
-                </div>
-            </div>
-            {
-                view ==='grid'&&(
-                    <div className="grid grid-cols-8 gap-5 py-8">
-                {documents.map((doc, k) => (
-                    <div key={k} className="flex flex-col items-center" title={String(doc.titre)+'.'+doc.file_path.split('.').pop()}>
-                        <div className="text-6xl">
-                            {getFileIcon(doc.file_path)}
-                        </div>
-                        <div className="text-center" title={String(doc.titre)+'.'+doc.file_path.split('.').pop()}>
-                            {String(doc.titre).substring(0,10)+'(...)'}.{doc.file_path.split('.').pop()}
-                        </div>
-                    </div>
-                ))}
-            </div>
-                )
-            
-            }
-            {
-                view ==='list'&&(
-                    <div className="overflow-x-auto">
-                <table className="table">
-                    {/* head */}
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Nom du fichier</th>
-                            <th>Taille du fichier</th>
-                            <th>Date de création du fichier</th>
-                            <th>Date d'archivage</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {/* row 1 */}
-                        
-                        {documents.map((doc, k) => (
-                            <tr key={k}>
-                            <th>
-                                <div className='text-xl'>
-                                {getFileIcon(doc.file_path)}
-                                </div>
-                            </th>
-                            <td>{doc.titre}.{doc.file_path.split('.').pop()}</td>
-                            <td>{doc?.taille > 1024 * 1024 ? (doc?.taille / (1024 * 1024)).toFixed(2) + ' Mo' : (doc?.taille / 1024).toFixed(2) + ' Ko'}</td>
-                            <td>
-                                {doc?.file_create_date}
-                            </td>
-                            <td>
-                            {new Date(doc?.created_at).getDate().toString().padStart(2,'0')}/{new Date(doc?.created_at).getMonth().toString().padStart(2,'0')}/{new Date(doc?.created_at).getFullYear()} - {new Date(doc?.created_at).getUTCHours()}:{new Date(doc?.created_at).getMinutes()}
-                            </td>
-                        </tr>
-                    
-                ))}
-                        
-                    </tbody>
-                </table>
-            </div>
-                )
-            }
-        </div>
+      <Breadcrumbs where={categorie?.label} />
+      <ViewToggleButtons view={view} setView={setView} />
+      {view === 'grid' ? (
+        <DocumentGrid documents={currentDocuments} getFileIcon={getFileIcon} />
+      ) : (
+        <DocumentList documents={currentDocuments} getFileIcon={getFileIcon} />
+      )}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(documents.length / documentsPerPage)}
+        onPageChange={setCurrentPage}
+      />
+    </div>
     );
 }
 
