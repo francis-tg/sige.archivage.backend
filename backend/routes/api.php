@@ -46,6 +46,7 @@ Route::put('/consultations/{code_pers}/{doc_id}', [ConsultationController::class
 Route::delete('/consultations/{code_pers}/{doc_id}', [ConsultationController::class, 'destroy']);
 //Documents
 Route::get('/documents', [DocumentController::class, 'index']);
+Route::get('/documents/count', [DocumentController::class, 'countDoc']);
 Route::post('/documents', [DocumentController::class, 'store']);
 Route::get('/documents/{doc_id}', [DocumentController::class, 'show']);
 Route::put('/documents/{doc_id}', [DocumentController::class, 'update']);

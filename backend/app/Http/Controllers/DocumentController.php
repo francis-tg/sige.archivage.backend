@@ -40,7 +40,7 @@ class DocumentController extends Controller
             $validatedData['file_path'] = $path;
             $validatedData['type'] = $file->getMimeType();
             $validatedData['taille'] = $file->getSize();
-            $validatedData['file_create_date'] = date("Y-m-d H:i:s", strtotime($validatedData['file_create_date']));
+            $validatedData['file_create_date'] = date('Y-m-d', strtotime(Date(DATE_ATOM,$validatedData['file_create_date'])));
             $validatedData['status_doc'] = 'disponible';
             
         }
@@ -123,6 +123,42 @@ class DocumentController extends Controller
         } catch (\Throwable $th) {
             DB::rollback();
             return response()->json(['error' => "Erreur de suppression: " . $th->getMessage()], 500);
+        }
+    }
+    public function countDoc(){
+        try {
+            // Récupérer tous les documents
+            $documents = Document::all();
+    
+            // Initialiser un tableau pour les comptages par extension
+            $counts = [
+                'pdf' => 0,
+                'doc' => 0,
+                'docx' => 0,
+                'xls' => 0,
+                'xlsx' => 0,
+                'csv' => 0,
+                'ppt' => 0,
+                'pptx' => 0,
+                'others' => 0
+            ];
+    
+            // Parcourir les documents et compter les extensions
+            foreach ($documents as $document) {
+                $extension = strtolower(pathinfo($document->file_path, PATHINFO_EXTENSION));
+                if (array_key_exists($extension, $counts)) {
+                    $counts[$extension]++;
+                } else {
+                    $counts['others']++;
+                }
+            }
+    
+            return response()->json([
+                'documents' => $documents,
+                'counts' => $counts
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => "Erreur de récupération: " . $th->getMessage()], 500);
         }
     }
 }

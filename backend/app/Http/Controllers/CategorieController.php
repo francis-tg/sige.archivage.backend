@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -51,7 +52,8 @@ class CategorieController extends Controller
     public function show(int $id_cat)
     {
         $categorie = Category::findOrFail($id_cat);
-        return response()->json($categorie, 200);
+        $docs = Document::where("category_id",'=',$id_cat)->get();
+        return response()->json(['dossier'=>$categorie,'documents'=>$docs], 200);
     }
 
     /**
