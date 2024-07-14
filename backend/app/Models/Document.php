@@ -21,8 +21,10 @@ class Document extends Model
         'auteur',
         'type',
         'resume',
+        'taille',
         'reference',
         'status_doc',
+        'file_create_date',
         'file_path',
     ];
 

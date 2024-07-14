@@ -4,11 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Personnel extends Model
+class Personnels extends Model
 {
     use HasFactory;
 
+    /**
+     * Summary of table
+     * @var string
+     */
+    protected $table = "personnels";
     /**
      * The attributes that are mass assignable.
      *
@@ -36,9 +42,9 @@ class Personnel extends Model
     /**
      * Get the bureau that the personnel belongs to.
      */
-    public function bureau()
+    public function bureau():BelongsTo
     {
-        return $this->belongsTo(Bureau::class);
+        return $this->belongsTo(Bureaux::class);
     }
 
     /**

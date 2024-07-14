@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('bureau_id')->constrained('bureaux')->onDelete('cascade');
             $table->string('nom');
             $table->string('prenom');
-            $table->string('email')->unique();
+            //$table->string('email')->unique();
             $table->timestamps();
         });
     }

@@ -14,14 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::table('personnels', function (Blueprint $table) {
-            $table->string('sexe');
-            $table->date('date_naissance');
-            $table->string('lieu_naissance');
-            $table->string('statut_mat');
-            $table->string('lieu_residence');
-            $table->string('first_phone');
+            $table->string('sexe')->nullable();
+            $table->date('date_naissance')->nullable();
+            $table->string('lieu_naissance')->nullable();
+            $table->string('statut_mat')->nullable();
+            $table->string('lieu_residence')->nullable();
+            $table->string('first_phone')->nullable();
             $table->string('second_phone')->nullable();
-            $table->string('cni');
+            $table->string('cni')->nullable();
             $table->string('photo')->nullable();
             $table->string('lang')->nullable();
             $table->text('bibliographie')->nullable();

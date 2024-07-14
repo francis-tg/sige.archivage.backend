@@ -24,11 +24,10 @@ class DocumentController extends Controller
             'category_id' => 'required|integer|exists:categories,id',
             'titre' => 'required|string|max:255',
             'auteur' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
             'resume' => 'required|string',
             'reference' => 'required|string|max:255',
-            'status_doc' => 'required|string|max:255',
-            'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048', // Adjust the file types and size as needed
+            "file_create_date"=>'required|integer',
+            'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,csv,xls,xlsx|max:32048', // Adjust the file types and size as needed
         ]);
 
         // Ajoutez l'ID de l'utilisateur actuellement authentifié
@@ -39,6 +38,11 @@ class DocumentController extends Controller
             $file = $request->file('file');
             $path = $file->store('documents'); // Stockez le fichier dans le répertoire storage/app/documents
             $validatedData['file_path'] = $path;
+            $validatedData['type'] = $file->getMimeType();
+            $validatedData['taille'] = $file->getSize();
+            $validatedData['file_create_date'] = date("Y-m-d H:i:s", strtotime($validatedData['file_create_date']));
+            $validatedData['status_doc'] = 'disponible';
+            
         }
 
         try {

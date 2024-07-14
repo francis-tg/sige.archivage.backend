@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bureau;
+use App\Models\Bureaux;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +13,7 @@ class BureauController extends Controller
      */
     public function index()
     {
-        $bureaux = Bureau::all();
+        $bureaux = Bureaux::all();
         return response()->json($bureaux, 200);
     }
 
@@ -31,12 +31,12 @@ class BureauController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:categories',
         ]);
 
         try {
             DB::beginTransaction();
-            $bureau = Bureau::create($validatedData);
+            $bureau = Bureaux::create($validatedData);
             DB::commit();
             return response()->json($bureau, 201);
         } catch (\Throwable $th) {
@@ -50,7 +50,7 @@ class BureauController extends Controller
      */
     public function show(int $id)
     {
-        $bureau = Bureau::findOrFail($id);
+        $bureau = Bureaux::findOrFail($id);
         return response()->json($bureau, 200);
     }
 
@@ -72,7 +72,7 @@ class BureauController extends Controller
         ]);
 
         try {
-            $bureau = Bureau::findOrFail($id);
+            $bureau = Bureaux::findOrFail($id);
             $bureau->update($validatedData);
             return response()->json($bureau, 200);
         } catch (\Throwable $th) {
@@ -87,7 +87,7 @@ class BureauController extends Controller
     {
         try {
             DB::beginTransaction();
-            $bureau = Bureau::findOrFail($id);
+            $bureau = Bureaux::findOrFail($id);
             $bureau->delete();
             DB::commit();
             return response()->json(['message' => 'Bureau supprimé avec succès'], 200);

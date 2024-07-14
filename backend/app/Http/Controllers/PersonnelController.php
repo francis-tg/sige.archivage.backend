@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Personnel;
+use App\Models\Bureaux;
+use App\Models\Personnels;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class PersonnelController extends Controller
      */
     public function index()
     {
-        $personnel = Personnel::all();
+        $personnel = Personnels::with("bureau")->get();
         return response()->json($personnel, 200);
     }
 
@@ -29,7 +30,9 @@ class PersonnelController extends Controller
         $validatedData = $request->validate([
             'nom_pers' => 'required|string',
             'prenom_pers' => 'required|string',
-            'email_pers' => 'required|string|email|unique:personnel',
+            'first_phone_pers'=>'required|string',
+            'email' => 'required|string|email|unique:users',
+            'bureau_id'=>'required|exists:bureaux,id',
             'role_id' => 'required|exists:roles,id', // Assuming you have a 'roles' table with 'id' as primary key
         ]);
 
@@ -39,15 +42,13 @@ class PersonnelController extends Controller
             // Create User entry for personnel
             $user = User::create([
                 'name' => $validatedData['nom_pers'] . ' ' . $validatedData['prenom_pers'],
-                'email' => $validatedData['email_pers'],
+                'email' => $validatedData['email'],
                 'password' => Hash::make($validatedData['first_phone_pers']),
+                'role_id'=>$validatedData['role_id']
             ]);
 
-            // Assign a role to the user
-            $user->assignRole($validatedData['role_id']); // Adjust this based on your role assignment logic
-
             // Create Personnel entry
-            $personnel = Personnel::create([
+            $personnel = Personnels::create([
                 'user_id' => $user->id,
                 'nom' => $validatedData['nom_pers'],
                 'prenom' => $validatedData['prenom_pers'],
@@ -67,7 +68,7 @@ class PersonnelController extends Controller
      */
     public function show($code_pers)
     {
-        $personnel = Personnel::findOrFail($code_pers);
+        $personnel = Personnels::findOrFail($code_pers);
         return response()->json($personnel, 200);
     }
 
@@ -95,7 +96,7 @@ class PersonnelController extends Controller
 
         try {
             DB::beginTransaction();
-            $personnel = Personnel::findOrFail($code_pers);
+            $personnel = Personnels::findOrFail($code_pers);
 
             // Update User entry if email or password is updated
             if (isset($validatedData['email_pers']) && $personnel->email_pers !== $validatedData['email_pers']) {
@@ -127,7 +128,7 @@ class PersonnelController extends Controller
     {
         try {
             DB::beginTransaction();
-            $personnel = Personnel::findOrFail($code_pers);
+            $personnel = Personnels::findOrFail($code_pers);
 
             // Delete associated User entry
             $user = User::where('email', $personnel->email_pers)->firstOrFail();
