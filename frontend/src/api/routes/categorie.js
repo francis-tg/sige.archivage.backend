@@ -1,4 +1,4 @@
-import { CREATE_BUREAU_API, CREATE_CATEGORIE_API, GET_BUREAU_API, GET_CATEGORIE_API } from "..";
+import { CREATE_CATEGORIE_API, GET_CATEGORIE_API } from "..";
 
 export async function getCategorie(){
     const {url,...meta} = GET_CATEGORIE_API;

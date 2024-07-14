@@ -4,7 +4,7 @@ import { LuUsers } from 'react-icons/lu'
 
 function Cards() {
     return (
-        <div className='grid md:grid-cols-4 grid-cols-1 gap-5'>
+        <div className='grid md:grid-cols-4 grid-cols-1 gap-5 mb-8'>
             <Card>
                 <div className='flex flex-col items-start gap-2'>
                     <div className='flex items-center gap-3'>

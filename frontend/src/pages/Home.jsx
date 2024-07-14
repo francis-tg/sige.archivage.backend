@@ -1,16 +1,93 @@
-import React, { useCallback, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
-import Cards from '../components/fragments/Cards'
-import { LuUploadCloud } from 'react-icons/lu'
-import { Link } from 'react-router-dom'
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { Link } from 'react-router-dom';
+import { LuFolder, LuPlus, LuUploadCloud } from 'react-icons/lu';
+import { IoClose } from 'react-icons/io5';
+import { toast } from 'react-toastify';
+import Cards from '../components/fragments/Cards';
+import { createCategorie, getCategorie } from '../api/routes/categorie';
+import { createDocument } from '../api/routes/document';
 
 function Home() {
-  const [selectedFiles, setSelectedFiles] = useState([])
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [dossiers, setDossiers] = useState([]);
+  const [folderData, setFolderData] = useState({ label: '' });
+  const [docData, setDocData] = useState({
+    titre: "",
+    resume: "",
+    auteur: "",
+    file_create_date: "",
+    reference: "",
+    category_id: null
+  });
+
+  const uploadFileRef = useRef(null);
 
   const onDrop = useCallback(acceptedFiles => {
-    setSelectedFiles(acceptedFiles)
-    console.log(acceptedFiles)
-  }, [])
+    setSelectedFiles(acceptedFiles);
+    const file = acceptedFiles[0];
+    setDocData(prevData => ({
+      ...prevData,
+      file_create_date: file?.lastModified,
+      titre: file?.name.split(".")[0]
+    }));
+  }, []);
+
+  const fetchFolders = async () => {
+    try {
+      const res = await getCategorie();
+      if (res.status === 200) {
+        const data = await res.json();
+        setDossiers(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getFormData = (e, callback) => {
+    callback(prevData => ({
+      ...prevData,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const createFolder = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await createCategorie(folderData);
+      if (res.status === 200) {
+        fetchFolders();
+        toast.success("Votre dossier a été bien créé");
+      } else {
+        toast.error("Une erreur s'est produite");
+      }
+    } catch (error) {
+      toast.error("Une erreur s'est produite");
+      console.log(error);
+    }
+  };
+
+  const archiveDoc = async () => {
+    try {
+      const res = await createDocument(docData, selectedFiles[0]);
+      if (res.status === 201) {
+        toast.success("Le dossier a été bien archivé");
+        if (uploadFileRef.current) {
+          uploadFileRef.current.close();
+        }
+      } else {
+        toast.error("Une erreur s'est produite");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Une erreur s'est produite");
+    }
+  };
+
+  useEffect(() => {
+    fetchFolders();
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -24,25 +101,61 @@ function Home() {
       'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
       'application/vnd.ms-powerpoint': ['.ppt'],
     }
-  })
+  });
 
   return (
     <div className='flex flex-col flex-grow py-2'>
       <div className="breadcrumbs text-sm">
         <ul>
-          <li><Link to={"/"}>Sige Archive</Link></li>
+          <li><Link to="/">Sige Archive</Link></li>
           <li>Tableau de bord</li>
         </ul>
       </div>
       <div className='flex items-end flex-grow justify-end mb-3'>
-        <button onClick={() => document.getElementById('uploadFile').showModal()} className="btn bg-primary text-white hover:bg-primary">
+        <button onClick={() => document.getElementById('uploadFile').showModal()} className="btn btn-sm bg-primary text-white hover:bg-primary">
           <LuUploadCloud />
           Archiver un document
         </button>
       </div>
       <Cards />
+      <div className=''>
+        <div className='flex items-end justify-end'>
+          <button onClick={() => document.getElementById('createFolder').showModal()} className='btn btn-sm bg-primary hover:bg-primary text-white'>
+            <LuPlus />
+            Nouveau dossier
+          </button>
+        </div>
+        <div className='grid grid-cols-8 justify-start w-full'>
+          {dossiers.map((dossier, k) => (
+            <Link to={''} key={k} className='flex items-center flex-col font-semibold'>
+              <LuFolder size={100} />
+              {dossier.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+      <dialog id="createFolder" className="modal">
+        <div className="modal-box w-3/4">
+          <form method="dialog" className='flex justify-end'>
+            <button className='btn btn-ghost'><IoClose /></button>
+          </form>
+          <div className='py-4'>
+            <form onSubmit={createFolder} method="post">
+              <div className="form-control mb-3">
+                <label htmlFor="name" className='mb-1'>Nom du dossier</label>
+                <input type="text" id='name' name='label' onChange={(e) => getFormData(e, setFolderData)} placeholder="Informatique" className="input input-bordered w-full" />
+              </div>
+              <div className="modal-action">
+                <button className='btn bg-primary hover:bg-primary text-white'>
+                  Créer un nouveau dossier
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </dialog>
 
-      <dialog id="uploadFile" className="modal">
+      <dialog ref={uploadFileRef} id="uploadFile" className="modal">
         <div className="modal-box w-3/4 max-w-xl">
           <h3 className="font-bold text-lg">
             Archiver un document
@@ -52,22 +165,18 @@ function Home() {
               <input {...getInputProps()} />
               <div className="flex items-center flex-col gap-2 justify-center md:py-8 text-center">
                 <LuUploadCloud className='text-primary' size={60} />
-                {
-                  isDragActive ?
-                    <div className='absolute top-0 rounded-md bg-gray-100 flex items-center justify-center text-primary w-full h-full text-center'>
-                      Déposer le fichier ici...
-                    </div> :
-                    (
-                      <div className='flex items-center flex-col justify-center'>
-                        <div>
-                          Documents acceptés <span className='font-bold'>(.pdf, .doc, .docx, .xlsx, .csv, .xls, .ppt, .pptx)</span>
-                        </div>
-                        <p>
-                          Glisser et déposer vos documents ici
-                        </p>
-                      </div>
-                    )
-
+                {isDragActive ?
+                  <div className='absolute top-0 rounded-md bg-gray-100 flex items-center justify-center text-primary w-full h-full text-center'>
+                    Déposer le fichier ici...
+                  </div> :
+                  <div className='flex items-center flex-col justify-center'>
+                    <div>
+                      Documents acceptés <span className='font-bold'>(.pdf, .doc, .docx, .xlsx, .csv, .xls, .ppt, .pptx)</span>
+                    </div>
+                    <p>
+                      Glisser et déposer vos documents ici
+                    </p>
+                  </div>
                 }
               </div>
             </div>
@@ -76,59 +185,77 @@ function Home() {
                 <h4 className='font-bold'>Fichiers sélectionnés:</h4>
                 <ul>
                   {selectedFiles.map((file, index) => (
-                    <li key={index}>{file.name}</li>
+                    <li key={index}>
+                      <p>Fichier: {file.name}</p>
+                      <p>Taille: {file.size > 1024 * 1024 ? (file.size / (1024 * 1024)).toFixed(2) + ' Mo' : (file.size / 1024).toFixed(2) + ' Ko'}</p>
+                      <p>Dernière modification: {new Date(file.lastModified).toLocaleDateString()}</p>
+                    </li>
                   ))}
                 </ul>
               </div>
             )}
           </div>
-          <div className='flex flex-col md:flex-row items-center gap-3'>
-            <div>
-              <div className="label">
-                <span className="label-text">Titre</span>
-              </div>
-              <input type="text" placeholder="Titre" className="input input-bordered w-full " />
-            </div>
-            <div>
-              <div className="label">
-                <span className="label-text">Auteur</span>
-              </div>
-              <input type="text" placeholder="Auteur" className="input input-bordered w-full" />
-            </div>
-          </div>
-          <div>
+
+          <div className='form-control'>
             <div className="label">
-              <span className="label-text">Emplacement</span>
+              <span className="label-text">Titre</span>
             </div>
-            <input type="text" placeholder="Emplacement" className="input input-bordered w-full" />
+            <input type="text" value={docData.titre} name='titre' onChange={(e) => getFormData(e, setDocData)} placeholder="Titre" className="input input-bordered w-full " />
           </div>
-          <div>
+          <div className='form-control'>
+            <div className="label">
+              <span className="label-text">Auteur</span>
+            </div>
+            <input type="text" name='auteur' value={docData.auteur} onChange={(e) => getFormData(e, setDocData)} placeholder="Auteur" className="input input-bordered w-full" />
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Catégorie</span>
+            </label>
+            <select
+              name="category_id"
+              value={docData.category_id}
+              onChange={(e) => getFormData(e, setDocData)}
+              className="select select-bordered"
+              required
+            >
+              <option value="">Sélectionner une catégorie</option>
+              {dossiers.map((dos, k) => (
+                <option key={k} value={dos.id}>{dos.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="form-control">
             <div className="label">
               <span className="label-text">Référence</span>
             </div>
-            <input type="text" placeholder="Auteur" className="input input-bordered w-full" />
+            <input type="text" name='reference' value={docData.reference} onChange={(e) => getFormData(e, setDocData)} placeholder="CM-0166" className="input input-bordered w-full" />
           </div>
-          <div>
+          <div className="form-control">
             <div className="label">
               <span className="label-text">Résumé du document</span>
             </div>
             <textarea
               placeholder="Résumé"
-              className="textarea textarea-bordered textarea-sm w-full"></textarea>
+              name='resume'
+              value={docData.resume}
+              onChange={(e) => getFormData(e, setDocData)}
+              className="textarea textarea-bordered textarea-sm w-full"
+            ></textarea>
           </div>
           <div className="modal-action">
             <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
               <button className="btn">Fermer</button>
             </form>
-            <button className='btn bg-primary hover:bg-primary text-white'>
+            <button onClick={archiveDoc} className='btn bg-primary hover:bg-primary text-white'>
               Archiver maintenant
             </button>
           </div>
         </div>
       </dialog>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

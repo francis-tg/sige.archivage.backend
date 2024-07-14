@@ -34,8 +34,7 @@ export const POST_DOCUMENTS_API = {
     url: `${BASE_URL}/documents`,
     method: "POST",
     headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
+        "Authorization": `Bearer ${token}`
     }
 }
 

@@ -2,18 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { getRoles } from '../api/routes/role';
 import { getBureaux } from '../api/routes/bureau';
 import { createPersonnel } from '../api/routes/personnel';
+import { toast } from 'react-toastify';
+import Loading from './Loading';
 
 function PersonnelModal({ isOpen, onClose, onSaveSuccess }) {
     const [formData, setFormData] = useState({
         nom_pers: '',
         prenom_pers: '',
-        email_pers: '',
+        email: '',
         role_id: '',
-        bureau_id: '', // Assuming bureau_id is also needed for Personnel creation
+        first_phone_pers:'',
+        bureau_id: '',
     });
     const [Roles, setRoles] = useState([])
     const [Bureaux, setBureaux] = useState([])
-
+    const [load,setLoading] = useState(false)
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -21,6 +24,8 @@ function PersonnelModal({ isOpen, onClose, onSaveSuccess }) {
             [name]: value,
         });
     };
+
+   
 
     function fetchRole() {
         getRoles().then(async function (res) {
@@ -37,8 +42,11 @@ function PersonnelModal({ isOpen, onClose, onSaveSuccess }) {
             if (res.status === 200) {
                 const data = await res.json()
                 setBureaux(data)
+            }else{
+                toast.error("Une erreur est survenue lors que la création du personnel")
             }
         }).catch(function (err) {
+            toast.error("Une erreur est survenue lors que la création du personnel")
             console.log(err)
         })
     }
@@ -46,31 +54,36 @@ function PersonnelModal({ isOpen, onClose, onSaveSuccess }) {
     useEffect(() => {
         fetchRole()
         fetchBureau()
+        
         return () => {
             fetchRole()
             fetchBureau()
+           
         }
-    },)
+    },[])
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true)
             const response = await createPersonnel(formData)
             if (response.status ===201) {
                 const data = await response.json()
                 onSaveSuccess(data); // Assuming response.data contains the saved personnel data
                 onClose(); // Close the modal on successful save
+                setLoading(false)
             }
         } catch (error) {
             console.error('Erreur lors de la sauvegarde du personnel:', error);
             // Handle error state or feedback to user
+            setLoading(false)
         }
     };
 
     if (!isOpen) return null;
 
-    return (
+    return load?<Loading/>: (
         <div className="modal modal-open">
             <div className="modal-box">
                 <h2 className="font-bold text-lg">Ajouter Personnel</h2>
@@ -109,8 +122,22 @@ function PersonnelModal({ isOpen, onClose, onSaveSuccess }) {
                         </label>
                         <input
                             type="email"
-                            name="email_pers"
-                            value={formData.email_pers}
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="input input-bordered"
+                            placeholder="Entrer l'email"
+                            required
+                        />
+                    </div>
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text">Numero de téléphone</span>
+                        </label>
+                        <input
+                            type="tel"
+                            name="first_phone_pers"
+                            value={formData.first_phone_pers}
                             onChange={handleChange}
                             className="input input-bordered"
                             placeholder="Entrer l'email"
@@ -147,7 +174,7 @@ function PersonnelModal({ isOpen, onClose, onSaveSuccess }) {
                         >
                             <option value="">Sélectionner un bureau</option>
                             {Bureaux.map((bureau)=>(
-                                <option value={bureau?.id}>{bureau?.nom}</option>
+                                <option value={bureau?.id}>{bureau?.name}</option>
                             ))}
                         </select>
                     </div>
