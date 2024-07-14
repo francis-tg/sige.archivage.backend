@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Link } from 'react-router-dom';
-import { LuFolder, LuPlus, LuUploadCloud } from 'react-icons/lu';
+import { Link, useNavigate } from 'react-router-dom';
+import { LuBookOpen, LuFileEdit, LuFolder, LuPlus, LuShare2, LuTrash2, LuUploadCloud } from 'react-icons/lu';
 import { IoClose } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import Cards from '../components/fragments/Cards';
 import { createCategorie, getCategorie } from '../api/routes/categorie';
 import { createDocument } from '../api/routes/document';
-
+import { ContextMenu, ContextMenuTrigger, ContextMenuContent,ContextMenuItem, ContextMenuShortcut } from '../ui/ui/context-menu';
 function Home() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [dossiers, setDossiers] = useState([]);
@@ -56,7 +56,7 @@ function Home() {
     e.preventDefault();
     try {
       const res = await createCategorie(folderData);
-      if (res.status === 200) {
+      if (res.status === 201) {
         fetchFolders();
         toast.success("Votre dossier a été bien créé");
       } else {
@@ -84,6 +84,8 @@ function Home() {
       toast.error("Une erreur s'est produite");
     }
   };
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     fetchFolders();
@@ -127,10 +129,34 @@ function Home() {
         </div>
         <div className='grid grid-cols-8 justify-start w-full'>
           {dossiers.map((dossier, k) => (
-            <Link to={''} key={k} className='flex items-center flex-col font-semibold'>
-              <LuFolder size={100} />
-              {dossier.label}
-            </Link>
+            <ContextMenu className="" >
+              <ContextMenuTrigger>
+                <Link to={'folder/' + dossier.id} key={k} className='flex hover:bg-orange-400/30 rounded-lg p-2 duration-500 items-center flex-col font-semibold'>
+                  <LuFolder size={100} />
+                  {dossier.label}
+                </Link>
+              </ContextMenuTrigger>
+              <ContextMenuContent className="w-64">
+              <ContextMenuItem inset className="cursor-pointer" onClick={()=>{navigate('folder/' + dossier.id)}}>
+                  Ouvrir le dossier
+                  <ContextMenuShortcut><LuBookOpen/></ContextMenuShortcut>
+                </ContextMenuItem>
+                <ContextMenuItem inset className="cursor-pointer">
+                  Partager le dossier
+                  <ContextMenuShortcut><LuShare2/></ContextMenuShortcut>
+                </ContextMenuItem>
+                <ContextMenuItem inset className="cursor-pointer">
+                  Renommer le dossier
+                  <ContextMenuShortcut><LuFileEdit/></ContextMenuShortcut>
+                </ContextMenuItem>
+                <ContextMenuItem inset className="text-red-500 hover:text-red-500 hover:bg-red-300/50 cursor-pointer">
+                  <div >
+                  Supprimer le dossier
+                  </div>
+                  <ContextMenuShortcut><LuTrash2/></ContextMenuShortcut>
+                </ContextMenuItem>
+              </ContextMenuContent>
+            </ContextMenu>
           ))}
         </div>
       </div>

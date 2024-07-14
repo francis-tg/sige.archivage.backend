@@ -38,3 +38,8 @@ export async function getDocument(){
     const {url,...meta} = GET_DOCUMENTS_API;
     return await fetch(url, {...meta,credentials:'include'})
 }
+
+export async function countDocument(){
+    const {url,...meta} = GET_DOCUMENTS_API;
+    return await fetch(url+'/count', {...meta,credentials:'include'})
+}

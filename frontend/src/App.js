@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import Personnel from "./pages/Personnel";
 import Document from "./pages/Document";
 import Settings from "./pages/Settings";
+import OpenFolder from "./pages/OpenFolder";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="personnel" element={<Personnel />} />
             <Route path="doc" element={<Document />} />
             <Route path="setting" element={<Settings />} />
+            <Route path="folder/:id" element={<OpenFolder/>} />
           </Route>
         </Route>
         <Route path="/login" element={<Login />} />
