@@ -66,10 +66,11 @@ function Document() {
             </div>
             {
                 view === 'grid' && (
-                    <ContextMenu>
-                        <ContextMenuTrigger>
-                            <div className="grid grid-cols-8 gap-5 py-8">
-                                {documents.map((doc, k) => (
+                    <div className="grid grid-cols-8 gap-5 py-8">
+                        {documents.map((doc, k) => (
+                            <ContextMenu>
+                                <ContextMenuTrigger>
+
                                     <div key={k} className="flex flex-col items-center" title={`${doc.titre}.${doc.file_path.split('.').pop()}`}>
                                         <div className="text-6xl">
                                             {getFileIcon(doc.file_path)}
@@ -78,28 +79,28 @@ function Document() {
                                             {`${doc.titre.substring(0, 10)}(...).${doc.file_path.split('.').pop()}`}
                                         </div>
                                     </div>
-                                ))}
-                            </div>
 
-                        </ContextMenuTrigger>
-                        <ContextMenuContent className="w-64">
-                            <ContextMenuItem inset>
-                                Partager le document
-                                <ContextMenuShortcut><LuShare2 /></ContextMenuShortcut>
-                            </ContextMenuItem>
-                            <ContextMenuItem inset>
-                                Renommer le document
-                                <ContextMenuShortcut><LuFileEdit /></ContextMenuShortcut>
-                            </ContextMenuItem>
-                            <ContextMenuItem inset>
-                                <div className="text-red-500">
-                                    Supprimer le document
-                                </div>
-                                <ContextMenuShortcut><LuTrash2 /></ContextMenuShortcut>
-                            </ContextMenuItem>
-                        </ContextMenuContent>
-                    </ContextMenu>
 
+                                </ContextMenuTrigger>
+                                <ContextMenuContent className="w-64">
+                                    <ContextMenuItem inset>
+                                        Partager le document
+                                        <ContextMenuShortcut><LuShare2 /></ContextMenuShortcut>
+                                    </ContextMenuItem>
+                                    <ContextMenuItem inset>
+                                        Renommer le document
+                                        <ContextMenuShortcut><LuFileEdit /></ContextMenuShortcut>
+                                    </ContextMenuItem>
+                                    <ContextMenuItem inset>
+                                        <div className="text-red-500">
+                                            Supprimer le document
+                                        </div>
+                                        <ContextMenuShortcut><LuTrash2 /></ContextMenuShortcut>
+                                    </ContextMenuItem>
+                                </ContextMenuContent>
+                            </ContextMenu>
+                        ))}
+                    </div>
                 )
             }
             {
