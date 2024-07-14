@@ -9,6 +9,7 @@ import Personnel from "./pages/Personnel";
 import Document from "./pages/Document";
 import Settings from "./pages/Settings";
 import OpenFolder from "./pages/OpenFolder";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="personnel" element={<Personnel />} />
             <Route path="doc" element={<Document />} />
             <Route path="setting" element={<Settings />} />
+            <Route path="profile" element={<Profile />} />
             <Route path="folder/:id" element={<OpenFolder/>} />
           </Route>
         </Route>
