@@ -32,7 +32,7 @@ function Navbar({ toggleSidebar }) {
 
             <div className='flex justify-end px-3 items-center gap-5'>
                 <LuBell size={20} />
-                {/* <Link to="/setting"><LuCog size={20} /></Link> */}
+                <Link to="/setting"><LuCog size={20} /></Link>
                 <div className="dropdown dropdown-end">
                     <div className="avatar placeholder" tabIndex={0}>
                         <div className="bg-neutral text-neutral-content w-8 rounded-full">

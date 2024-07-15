@@ -182,7 +182,7 @@ function PersonnelModal({ isOpen, onClose, onSaveSuccess }) {
                         <button type="button" className="btn" onClick={onClose}>
                             Annuler
                         </button>
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn text-white hover:bg-primary bg-primary">
                             Sauvegarder
                         </button>
                     </div>

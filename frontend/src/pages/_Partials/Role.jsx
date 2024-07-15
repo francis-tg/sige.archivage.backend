@@ -1,14 +1,14 @@
 import React from 'react'
 import { LuPlus } from 'react-icons/lu'
 
-function Role() {
+function Role({Roles}) {
     return (
         <div>
             <div className="flex items-center justify-end">
-                <button onClick={() => document.getElementById('add_role').showModal()} className='btn btn-sm bg-primary text-white hover:bg-primary'>
+                {/* <button onClick={() => document.getElementById('add_role').showModal()} className='btn btn-sm bg-primary text-white hover:bg-primary'>
                     <LuPlus/>
                     Nouvau Role
-                </button>
+                </button> */}
             </div>
             <div className="overflow-x-auto">
                 <table className="table">
@@ -18,31 +18,18 @@ function Role() {
                             <th></th>
                             <th>Nom du role</th>
                             <th>Accréditation</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {/* row 1 */}
-                        <tr>
-                            <th>1</th>
-                            <td>Cy Ganderton</td>
-                            <td>Quality Control Specialist</td>
-                            <td>Blue</td>
+                        
+                        {Roles.map((role,k)=>(
+                            <tr key={k}>
+                            <th></th>
+                            <td>{role.label}</td>
+                            <td>{role.acreditation}</td>
                         </tr>
-                        {/* row 2 */}
-                        <tr className="hover">
-                            <th>2</th>
-                            <td>Hart Hagerty</td>
-                            <td>Desktop Support Technician</td>
-                            <td>Purple</td>
-                        </tr>
-                        {/* row 3 */}
-                        <tr>
-                            <th>3</th>
-                            <td>Brice Swyre</td>
-                            <td>Tax Accountant</td>
-                            <td>Red</td>
-                        </tr>
+                        ))}
+                        
                     </tbody>
                 </table>
             </div>

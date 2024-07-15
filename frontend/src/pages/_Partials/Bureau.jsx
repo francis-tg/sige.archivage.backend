@@ -1,7 +1,44 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { LuPlus } from 'react-icons/lu'
+import { createBureaux } from '../../api/routes/bureau';
+import { toast } from 'react-toastify';
 
-function Bureau() {
+function Bureau({Bureaux}) {
+    const [formData, setFormData] = useState({
+        name:''
+    })
+
+    const modalRef = useRef();
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+    /**
+     * 
+     * @param {Event} e 
+     */
+    function handleSubmit(e){
+        e.preventDefault()
+        try {
+            createBureaux(formData).then(async function(res){
+                if (res.status===201) {
+                    toast.success("Bureau créé avec succès")
+                    if (modalRef.current) {
+                        modalRef.current.close()
+                    }
+                    return
+                }else{
+                    toast.error("Une erreur s'est produite")
+                }
+            })
+        } catch (error) {
+            toast.error("Une erreur s'est produite")
+        }
+    }
     return (
         <div>
             <div className="flex items-center justify-end">
@@ -17,36 +54,24 @@ function Bureau() {
                         <tr>
                             <th></th>
                             <th>Nom du bureau</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {/* row 1 */}
-                        <tr>
-                            <th>1</th>
-                            <td>Cy Ganderton</td>
-                            <td>Quality Control Specialist</td>
+                        {
+                            Bureaux.map((bureau, k) => (
 
-                        </tr>
-                        {/* row 2 */}
-                        <tr className="hover">
-                            <th>2</th>
-                            <td>Hart Hagerty</td>
-                            <td>Desktop Support Technician</td>
+                                < tr key={k}>
+                                    <th>1</th>
+                                    <td>{bureau?.name}</td>
+                                </tr>
+                            ))
+                        }
 
-                        </tr>
-                        {/* row 3 */}
-                        <tr>
-                            <th>3</th>
-                            <td>Brice Swyre</td>
-                            <td>Tax Accountant</td>
-
-                        </tr>
                     </tbody>
                 </table>
             </div>
             {/* You can open the modal using document.getElementById('ID').showModal() method */}
-            <dialog id="add_bureau" className="modal">
+            <dialog id="add_bureau" ref={modalRef} className="modal">
                 <div className="modal-box">
                     <form method="dialog">
                         {/* if there is a button in form, it will close the modal */}
@@ -56,24 +81,18 @@ function Bureau() {
                         <h1 className='text-xl font-bold mb-5'>
                             Ajouter un bureau
                         </h1>
-                        <form action="" method="post">
+                        <form action="" method="post" onSubmit={handleSubmit}>
                             <div className="form-control mb-3">
                                 <label htmlFor="name" className='mb-1'>Nom du bureau</label>
-                                <input type="text" id='name' placeholder="Bureau Informatique" class="input input-bordered w-full" />
+                                <input type="text" id='name' name='name' onChange={handleChange} placeholder="Bureau Informatique" class="input input-bordered w-full" />
                             </div>
+                            <button className='btn bg-primary text-white hover:bg-primary'>Enregistrer</button>
                         </form>
                     </div>
-                    <div className='modal-action'>
-                        <form method='dialog'>
-                            <button className='btn bg-secondary hover:bg-secondary'>
-                                Fermer
-                            </button>
-                        </form>
-                        <button className='btn bg-primary text-white hover:bg-primary'>Enregistrer</button>
-                    </div>
+                   
                 </div>
             </dialog>
-        </div>
+        </div >
     )
 }
 
