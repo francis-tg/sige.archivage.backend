@@ -4,10 +4,11 @@ import { ContextMenuTrigger, ContextMenu, ContextMenuItem, ContextMenuContent, C
 import { LuFileEdit, LuShare2, LuTrash2 } from 'react-icons/lu';
 
 function DocumentItem({ doc }) {
+    const user = JSON.parse(sessionStorage.getItem("user"))
     return (
         <ContextMenu>
             <ContextMenuTrigger>
-                <div className="flex flex-col items-center" title={`${doc.titre}.${doc.file_path.split('.').pop()}`}>
+                <div className="flex flex-col items-center " title={`${doc.titre}.${doc.file_path.split('.').pop()}`}>
                     <div className="text-6xl">
                         {getFileIcon(doc.file_path)}
                     </div>
@@ -21,7 +22,7 @@ function DocumentItem({ doc }) {
                     Partager le document
                     <ContextMenuShortcut><LuShare2 /></ContextMenuShortcut>
                 </ContextMenuItem>
-                <ContextMenuItem inset>
+                <ContextMenuItem inset className="disabled:cursor-not-allowed" disabled>
                     Renommer le document
                     <ContextMenuShortcut><LuFileEdit /></ContextMenuShortcut>
                 </ContextMenuItem>

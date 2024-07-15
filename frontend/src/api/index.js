@@ -37,6 +37,22 @@ export const POST_DOCUMENTS_API = {
         "Authorization": `Bearer ${token}`
     }
 }
+export const UPDATE_DOCUMENTS_API = {
+    url: `${BASE_URL}/documents`,
+    method: "PUT",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+
+    }
+}
+export const DELETE_DOCUMENTS_API = {
+    url: `${BASE_URL}/documents`,
+    method: "DELETE",
+    headers: {
+        "Authorization": `Bearer ${token}`
+    }
+}
 
 export const GET_ROLE_API = {
     url: `${BASE_URL}/roles`,
@@ -70,6 +86,14 @@ export const CREATE_BUREAU_API = {
         "Content-Type": "application/json"
     }
 }
+export const DELETE_BUREAU_API = {
+    url: `${BASE_URL}/bureaux`,
+    method: "DELETE",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+    }
+}
 
 export const CREATE_PERSONNEL_API = {
     url: `${BASE_URL}/personnels`,
@@ -88,6 +112,22 @@ export const GET_CATEGORIE_API = {
     }
 }
 
+export const DELETE_CATEGORIE_API = {
+    url: `${BASE_URL}/categories`,
+    method: "DELETE",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+    }
+}
+
+export const UPDATE_CATEGORIE_API = {
+    url: `${BASE_URL}/categories`,
+    method: "PUT",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+    }
+}
 
 export const CREATE_CATEGORIE_API = {
     url: `${BASE_URL}/categories`,

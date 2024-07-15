@@ -1,11 +1,24 @@
 
 import { LuBell, LuCog, LuMenu } from 'react-icons/lu';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { logoutAPI } from '../api/routes/auth';
 
 function Navbar({ toggleSidebar }) {
-    const user = JSON.parse(sessionStorage.getItem("user"));
-
+    const [user,setUser] = useState({}) ;
+    const navigate = useNavigate()
+    function logout(){
+        logoutAPI().then(async function(res){
+            if (res.status===200) {
+                sessionStorage.clear()
+                navigate("/login")
+            }
+        })
+    }
+    useEffect(() => {
+      setUser(JSON.parse(sessionStorage.getItem("user")))
+    }, [])
+    
     return (
         <div className='flex justify-between items-center py-2 px-5'>
             <div className='flex gap-10 items-center'>
@@ -30,7 +43,7 @@ function Navbar({ toggleSidebar }) {
                     </div>
                     <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                         <li><Link to={'/profile'} >Profile</Link></li>
-                        <li><Link to='/logout' className='text-red-500'>Déconnexion</Link></li>
+                        <li><Link to='/#' onClick={logout} className='text-red-500'>Déconnexion</Link></li>
                     </ul>
                 </div>
             </div>

@@ -16,14 +16,11 @@ export const useAuthStatus = () => {
           if (res.status === 200) {
             
             const data = await res.json()
-            const { token, token_type, user } = data
-            console.log(data)
+            const { token, user,role } = data
             setLoggedIn(true)
              sessionStorage.setItem('token', token)
-            sessionStorage.setItem('type_token', token_type)
-            sessionStorage.setItem('user', JSON.stringify(user)) 
+            sessionStorage.setItem('user', JSON.stringify({...user,role})) 
             setCheckingStatus(false)
-            
           }
           else {
             setCheckingStatus(false)

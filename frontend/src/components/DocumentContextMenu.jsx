@@ -9,22 +9,24 @@ const DocumentContextMenu = ({ doc, children }) => {
           <ContextMenuTrigger>
             {children}
           </ContextMenuTrigger>
+          {user?.role !==null ?
           <ContextMenuContent className="w-64">
             <ContextMenuItem inset>
               Partager le document
               <ContextMenuShortcut><LuShare2 /></ContextMenuShortcut>
             </ContextMenuItem>
-            <ContextMenuItem inset>
+            <ContextMenuItem inset disabled={user?.role !=="Administrator"}>
               Renommer le document
               <ContextMenuShortcut><LuFileEdit /></ContextMenuShortcut>
             </ContextMenuItem>
             <ContextMenuItem inset >
-              <div className="text-red-500">
+              <div className="text-red-500" disabled={user?.role !=="Administrator"}>
                 Supprimer le document
               </div>
               <ContextMenuShortcut><LuTrash2 /></ContextMenuShortcut>
             </ContextMenuItem>
           </ContextMenuContent>
+          :''}
         </ContextMenu>
       );
 }

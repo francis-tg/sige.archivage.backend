@@ -3,7 +3,7 @@ import DocumentContextMenu from './DocumentContextMenu';
 
 const DocumentList = ({ documents, getFileIcon }) => (
   <div className="overflow-x-auto">
-    <table className="table">
+    <table className="table py-3 mb-3">
       <thead>
         <tr>
           <th></th>
@@ -15,7 +15,7 @@ const DocumentList = ({ documents, getFileIcon }) => (
       </thead>
       <tbody>
         {documents.map((doc, k) => (
-          <tr key={k}>
+          <tr key={k} className='hover:bg-amber-500/30 rounded'>
             <th>
               <DocumentContextMenu doc={doc}>
                 <div className='text-xl'>
