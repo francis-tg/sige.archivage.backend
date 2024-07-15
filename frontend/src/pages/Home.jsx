@@ -268,35 +268,100 @@ function Home() {
         </div>
       </dialog>
 
-      <dialog id="uploadFile" className="modal" ref={uploadFileRef}>
-        <div className="modal-box w-11/12 max-w-5xl">
-          <form method="dialog" className='flex justify-end'>
-            <button className='btn btn-ghost'><IoClose /></button>
-          </form>
-          <div className='py-4'>
-            <form onSubmit={archiveDoc}>
-              <div {...getRootProps()} className='border-2 border-dashed rounded-md p-6 cursor-pointer'>
-                <input {...getInputProps()} />
-                {
-                  isDragActive ?
-                    <p>Déposez le fichier ici ...</p> :
-                    <p>Glissez et déposez un fichier ici, ou cliquez pour sélectionner un fichier</p>
+      <dialog ref={uploadFileRef} id="uploadFile" className="modal">
+        <div className="modal-box w-3/4 max-w-xl">
+          <h3 className="font-bold text-lg">
+            Archiver un document
+          </h3>
+          <div className="py-4">
+            <div {...getRootProps()} className='border-2 relative border-dashed border-primary p-2 h-48 rounded-lg'>
+              <input {...getInputProps()} />
+              <div className="flex items-center flex-col gap-2 justify-center md:py-8 text-center">
+                <LuUploadCloud className='text-primary' size={60} />
+                {isDragActive ?
+                  <div className='absolute top-0 rounded-md bg-gray-100 flex items-center justify-center text-primary w-full h-full text-center'>
+                    Déposer le fichier ici...
+                  </div> :
+                  <div className='flex items-center flex-col justify-center'>
+                    <div>
+                      Documents acceptés <span className='font-bold'>(.pdf, .doc, .docx, .xlsx, .csv, .xls, .ppt, .pptx)</span>
+                    </div>
+                    <p>
+                      Glisser et déposer vos documents ici
+                    </p>
+                  </div>
                 }
               </div>
-              {selectedFiles.length > 0 && (
-                <div className='mt-4'>
-                  <h4 className='font-semibold'>Fichier sélectionné:</h4>
-                  <p>{selectedFiles[0].name}</p>
-                </div>
-              )}
-              <div className='form-control mt-4'>
-                <label htmlFor="titre" className='mb-1'>Titre du document</label>
-                <input type="text" id='titre' name='titre' value={docData.titre} onChange={(e) => getFormData(e, setDocData)} className="input input-bordered w-full" />
+            </div>
+            {selectedFiles.length > 0 && (
+              <div className='mt-4'>
+                <h4 className='font-bold'>Fichiers sélectionnés:</h4>
+                <ul>
+                  {selectedFiles.map((file, index) => (
+                    <li key={index}>
+                      <p>Fichier: {file.name}</p>
+                      <p>Taille: {file.size > 1024 * 1024 ? (file.size / (1024 * 1024)).toFixed(2) + ' Mo' : (file.size / 1024).toFixed(2) + ' Ko'}</p>
+                      <p>Dernière modification: {new Date(file.lastModified).toLocaleDateString()}</p>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="modal-action">
-                <button className='btn bg-primary text-white hover:bg-primary'>Archiver</button>
-              </div>
+            )}
+          </div>
+          <div className='form-control'>
+            <div className="label">
+              <span className="label-text">Titre</span>
+            </div>
+            <input type="text" value={docData.titre} name='titre' onChange={(e) => getFormData(e, setDocData)} placeholder="Titre" className="input input-bordered w-full " />
+          </div>
+          <div className='form-control'>
+            <div className="label">
+              <span className="label-text">Auteur</span>
+            </div>
+            <input type="text" name='auteur' value={docData.auteur} onChange={(e) => getFormData(e, setDocData)} placeholder="Auteur" className="input input-bordered w-full" />
+          </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Catégorie</span>
+            </label>
+            <select
+              name="category_id"
+              value={docData.category_id}
+              onChange={(e) => getFormData(e, setDocData)}
+              className="select select-bordered"
+              required
+            >
+              <option value="">Sélectionner une catégorie</option>
+              {dossiers.map((dos, k) => (
+                <option key={k} value={dos.id}>{dos.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="form-control">
+            <div className="label">
+              <span className="label-text">Référence</span>
+            </div>
+            <input type="text" name='reference' value={docData.reference} onChange={(e) => getFormData(e, setDocData)} placeholder="CM-0166" className="input input-bordered w-full" />
+          </div>
+          <div className="form-control">
+            <div className="label">
+              <span className="label-text">Résumé du document</span>
+            </div>
+            <textarea
+              placeholder="Résumé"
+              name='resume'
+              value={docData.resume}
+              onChange={(e) => getFormData(e, setDocData)}
+              className="textarea textarea-bordered textarea-sm w-full"
+            ></textarea>
+          </div>
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn">Fermer</button>
             </form>
+            <button onClick={archiveDoc} className='btn bg-primary hover:bg-primary text-white'>
+              Archiver maintenant
+            </button>
           </div>
         </div>
       </dialog>
