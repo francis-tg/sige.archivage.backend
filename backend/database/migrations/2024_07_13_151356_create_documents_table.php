@@ -26,7 +26,10 @@ return new class extends Migration
             $table->string('file_path')->nullable();
             $table->timestamps();
         });
+        
     }
+
+    
 
     /**
      * Reverse the migrations.

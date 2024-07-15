@@ -31,7 +31,7 @@ class BureauController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255|unique:categories',
+            'name' => 'required|string|max:255|unique:bureaux',
         ]);
 
         try {

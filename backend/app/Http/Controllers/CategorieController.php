@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Document;
+use App\Models\Share;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -32,7 +33,7 @@ class CategorieController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'label' => 'required|string|max:255',
+            'label' => 'required|string|max:255|categories',
         ]);
 
         try {
@@ -81,7 +82,32 @@ class CategorieController extends Controller
             return response()->json(['error' => "Erreur de mise à jour: " . $th->getMessage()], 500);
         }
     }
+    public function share(Request $request, Category $folder)
+    {
+        Share::create([
 
+        ]);
+        
+        return response()->json(['message' => 'Folder shared successfully.']);
+    }
+
+    public function favorite(Request $request,Category $folder)
+    {
+        // Logic to add the folder to the user's favorites
+      $user = auth('api')->user();
+        $user->favoriteFolders()->attach($folder);
+
+        return response()->json(['message' => 'Folder favorited successfully.']);
+    }
+
+    public function unfavorite(Request $request, Category $folder)
+    {
+        // Logic to remove the folder from the user's favorites
+        $user = auth('api')->user();
+        $user->favoriteFolders()->detach($folder);
+
+        return response()->json(['message' => 'Folder unfavorited successfully.']);
+    }
     /**
      * Remove the specified resource from storage.
      */

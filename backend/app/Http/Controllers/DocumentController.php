@@ -57,6 +57,38 @@ class DocumentController extends Controller
         }
     }
 
+    public function share(Request $request,Document $file)
+    {
+        $validated = $request->validate([
+            "permissions"=>'required|string'
+        ]);
+        $user = auth('api')->user();
+        $file->shares()->create([
+            'user_id' => $user->id,
+            'permissions' => $validated["permissions"], // or 'write'
+        ]);
+        
+        return response()->json(['message' => 'File shared successfully.']);
+    }
+
+    public function favorite(Request $request, Document $file)
+    {
+        // Logic to add the file to the user's favorites
+        $user = auth('api')->user();
+        $user->favoriteFiles()->attach($file);
+
+        return response()->json(['message' => 'File favorited successfully.']);
+    }
+
+    public function unfavorite(Request $request, Document $file)
+    {
+        // Logic to remove the file from the user's favorites
+        $user = auth('api')->user();
+        $user->favoriteFiles()->detach($file);
+
+        return response()->json(['message' => 'File unfavorited successfully.']);
+    }
+
     /**
      * Display the specified resource.
      */

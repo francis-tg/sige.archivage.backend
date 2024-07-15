@@ -18,4 +18,13 @@ class Category extends Model
         'label',
         // Add other fillable fields here as needed
     ];
+    public function shares()
+    {
+        return $this->morphMany(Share::class, 'shareable');
+    }
+
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'favoritable');
+    }
 }
