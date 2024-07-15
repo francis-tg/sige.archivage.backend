@@ -33,7 +33,7 @@ class CategorieController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'label' => 'required|string|max:255|categories',
+            'label' => 'required|string|max:255',
         ]);
 
         try {
