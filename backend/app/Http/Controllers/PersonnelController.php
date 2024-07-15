@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bureaux;
 use App\Models\Personnels;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -44,9 +45,13 @@ class PersonnelController extends Controller
                 'name' => $validatedData['nom_pers'] . ' ' . $validatedData['prenom_pers'],
                 'email' => $validatedData['email'],
                 'password' => Hash::make($validatedData['first_phone_pers']),
-                'role_id'=>$validatedData['role_id']
+                
             ]);
 
+            UserRole::create([
+                'role_id'=>$validatedData['role_id'],
+                'user_id' => $user->id,
+            ]);
             // Create Personnel entry
             $personnel = Personnels::create([
                 'user_id' => $user->id,

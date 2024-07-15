@@ -5,17 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class UserRole extends Model
 {
     use HasFactory;
-
+    protected $table = "role_user";
+    /**
+     * Summary of primaryKey
+     * @var string
+     */
+    protected $primaryKey = "id";
+    /**
+     * Summary of incrementing
+     * @var bool
+     */
+    public $incrementing = true;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'label',
+        'user_id',
+        'role_id',
     ];
 
     /**
@@ -26,8 +37,4 @@ class Role extends Model
     protected $casts = [
         'id' => 'integer',
     ];
-    public function roles()
-    {
-        return $this->hasManyThrough(Bureaux::class,UserRole::class);
-    }
 }

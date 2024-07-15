@@ -70,7 +70,7 @@ class CategorieController extends Controller
     public function update(Request $request, int $id_cat)
     {
         $validatedData = $request->validate([
-            'label' => 'required|string|max:255',
+            'label' => 'required|string|max:255|unique:categories,label',
         ]);
 
         try {
