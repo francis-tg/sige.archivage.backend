@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { getFormData } from '../../utils/common'
+import { updatePersonnels } from '../../api/routes/personnel';
+import { toast } from 'react-toastify';
 
 function PersonnalInfo() {
     const [personnel, setPersonnel] = useState({
@@ -17,12 +19,35 @@ function PersonnalInfo() {
         bibliographie: '',
         nb_enfant: 0,
       });
+      /**
+       * 
+       * @param {Event} e 
+       */
+      function putPersonnalData(e){
+        e.preventDefault();
+        try {
+            updatePersonnels(personnel).then(async(res)=>{
+                if (res.status===200) {
+                    const data = await res.json();
+                    setPersonnel(data?.personnel)
+                    toast.success("Votre profile a été bien modifié")
+                }else{
+                    toast.error("Une erreur s'est produite")
+                }
+            }).catch(function(){
+                toast.error("Une erreur s'est produite")
+            })
+        } catch (error) {
+            toast.error("Une erreur s'est produite")
+        }
+      }
+      
     return (
         <div className='max-h-[50vh] overflow-auto px-8 relative'>
+            <form onSubmit={putPersonnalData} method="post">
             <div className='flex items-end justify-end sticky top-0'>
                 <button className='btn btn-sm bg-primary text-white hover:bg-primary'>Mettre à jour</button>
             </div>
-            <form action="" method="post">
                 <div className="grid md:grid-cols-2 grid-cols-1 gap-3">
                     <div className="form-control mb-3">
                         <label htmlFor="name" className='mb-1'>Nom </label>

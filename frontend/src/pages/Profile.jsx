@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { GET_PERSONNEL_API, UPDATE_PERSONNEL_API } from '../api';
 import AuthInfo from './_Partials/AuthInfo';
 import PersonnalInfo from './_Partials/PersonnalInfo';
 
-
-
 const Profile = () => {
-  
   const [user, setUser] = useState({})
-
+  
   useEffect(() => {
     const getUser = JSON.parse(sessionStorage.getItem("user"))
     setUser(getUser)
   }, []);
-
-
-
   return (
     <div className='w-full py-5'>
       <div className='flex items-start gap-3'>

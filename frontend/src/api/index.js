@@ -23,6 +23,14 @@ export const AUTH_ME_API = {
         "Authorization": `Bearer ${token}`
     }
 }
+export const AUTH_UPDATE_API = {
+    url: `${BASE_URL}/auth/update`,
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    }
+}
 export const GET_DOCUMENTS_API = {
     url: `${BASE_URL}/documents`,
     method: "GET",
@@ -121,7 +129,7 @@ export const CREATE_PERSONNEL_API = {
 }
 export const UPDATE_PERSONNEL_API = {
     url: `${BASE_URL}/personnels`,
-    method: "POST",
+    method: "PUT",
     headers: {
         "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json"
