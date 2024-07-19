@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Document;
 use Illuminate\Support\Facades\DB;
@@ -42,6 +43,9 @@ class DocumentController extends Controller
             $validatedData['taille'] = $file->getSize();
             $validatedData['file_create_date'] = date('Y-m-d', strtotime(Date(DATE_ATOM,$validatedData['file_create_date'])));
             $validatedData['status_doc'] = 'disponible';
+            $getCat = Category::find($validatedData['category_id']);
+            Storage::disk("sftp")->makeDirectory($getCat['label']);
+            Storage::disk('sftp')->putFileAs($getCat['label'],$request->file('file'),$validatedData['titre'].'.'.$file->extension());
             
         }
 
@@ -95,7 +99,9 @@ class DocumentController extends Controller
     public function show(int $doc_id)
     {
         $document = Document::with('user', 'category')->findOrFail($doc_id); // Inclure les relations User et Category
-        return response()->json($document, 200);
+        //$doc=Storage::disk("local")->get();
+        
+        return response()->file(storage_path("app/".$document['file_path']));
     }
 
     /**

@@ -61,8 +61,11 @@ return [
             'host' => env('SFTP_HOST'),
             'username' => env('SFTP_USERNAME'),
             'password' => env('SFTP_PASSWORD'),
-            'port' => env('SFTP_PORT', 22),
-            'root' => env('SFTP_ROOT', '/home/sftpuser/uploads'),
+            'port' => intval( env('SFTP_PORT', 22)),
+            'root' => env('SFTP_ROOT', '/home/cisco'),
+            'visibility' => 'public',
+            'permPublic'=>0755,
+            'directoryPerm'=>0755
         ],
 
         /*'smb' => [

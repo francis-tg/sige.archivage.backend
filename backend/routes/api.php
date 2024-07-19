@@ -6,6 +6,7 @@ use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StorageController;
 use App\Http\Middleware\AuthPersonnelMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -46,10 +47,10 @@ Route::put('/consultations/{code_pers}/{doc_id}', [ConsultationController::class
 Route::delete('/consultations/{code_pers}/{doc_id}', [ConsultationController::class, 'destroy']);
 //Documents
 Route::get('/documents', [DocumentController::class, 'index']);
-Route::post('/documents', [DocumentController::class, 'share']);
+Route::post('/documents/share', [DocumentController::class, 'share']);
 Route::get('/documents/count', [DocumentController::class, 'countDoc']);
 Route::post('/documents', [DocumentController::class, 'store']);
-Route::get('/documents/{doc_id}', [DocumentController::class, 'show']);
+Route::get('/documents/{doc_id}', [DocumentController::class, 'show'])->withoutMiddleware([AuthPersonnelMiddleware::class]);
 Route::put('/documents/{doc_id}', [DocumentController::class, 'update']);
 Route::delete('/documents/{doc_id}', [DocumentController::class, 'destroy']);
 
@@ -57,9 +58,9 @@ Route::delete('/documents/{doc_id}', [DocumentController::class, 'destroy']);
 //Personnels
 Route::get('/personnels', [PersonnelController::class, 'index']);
 Route::post('/personnels', [PersonnelController::class, 'store']);
-Route::get('/personnels/{code_pers}', [PersonnelController::class, 'show']);
-Route::put('/personnels/{code_pers}', [PersonnelController::class, 'update']);
-Route::delete('/personnels/{code_pers}', [PersonnelController::class, 'destroy']);
+Route::get('/personnels', [PersonnelController::class, 'show']);
+Route::put('/personnels', [PersonnelController::class, 'update']);
+Route::delete('/personnels', [PersonnelController::class, 'destroy']);
 
 //Roles
 Route::get('/roles', [RoleController::class, 'index']);
@@ -68,3 +69,6 @@ Route::get('/roles/{code_role}', [RoleController::class, 'show']);
 Route::put('/roles/{code_role}', [RoleController::class, 'update']);
 Route::delete('/roles/{code_role}', [RoleController::class, 'destroy']);
 
+//Storage
+
+Route::post("/storage",[StorageController::class,'store']);

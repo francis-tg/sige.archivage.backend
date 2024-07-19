@@ -7,6 +7,7 @@ use App\Models\Document;
 use App\Models\Share;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CategorieController extends Controller
 {
@@ -76,6 +77,10 @@ class CategorieController extends Controller
 
         try {
             $categorie = Category::findOrFail($id_cat);
+           if (Storage::disk('sftp')->exists($categorie['label'])) {
+            # code...
+              Storage::disk("sftp")->move($categorie["label"],$validatedData['label']);
+           }
             $categorie->update($validatedData);
             return response()->json($categorie, 200);
         } catch (\Throwable $th) {

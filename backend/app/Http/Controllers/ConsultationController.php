@@ -30,7 +30,8 @@ class ConsultationController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'date_consultation' => 'required'
+            'user_id'=>'required|exists:users,id',
+            'document_id'=>'required|exists:documents,id',
         ]);
         try {
             DB::beginTransaction();
