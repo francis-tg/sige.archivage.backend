@@ -36,11 +36,11 @@ class CategorieController extends Controller
         $validatedData = $request->validate([
             'label' => 'required|string|max:255|unique:categories,label',
         ]);
-
         try {
             DB::beginTransaction();
             $categorie = Category::create($validatedData);
             DB::commit();
+            //Storage::disk("sftp")->makeDirectory($categorie['label']);
             return response()->json($categorie, 201);
         } catch (\Throwable $th) {
             DB::rollback();
