@@ -55,7 +55,7 @@ function Personnel() {
     // Calcul des personnels à afficher sur la page courante
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = personnels.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = personnels?.slice(indexOfFirstItem, indexOfLastItem);
 
     return (
         <div className="flex flex-col flex-grow py-2">
@@ -122,19 +122,19 @@ function Personnel() {
             <PersonnelModal isOpen={isModalOpen} onClose={handleCloseModal} onSaveSuccess={handleSubmit} />
 
             {/* Pagination */}
-            {personnels.length > 0 && (
+            {personnels?.length > 0 && (
                 <div className="flex justify-center mt-4">
                     <button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className={`btn ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-primary hover:bg-primary'} text-white mr-2`}
+                        className={`btn ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-primary  hover:bg-primary'} btn-sm text-white mr-2`}
                     >
                         Précédent
                     </button>
                     <button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={indexOfLastItem >= personnels.length}
-                        className={`btn ${indexOfLastItem >= personnels.length ? 'bg-gray-300 cursor-not-allowed' : 'bg-primary hover:bg-primary'} text-white`}
+                        className={`btn ${indexOfLastItem >= personnels.length ? 'bg-gray-300 btn-sm cursor-not-allowed' : 'bg-primary btn-sm hover:bg-primary'} text-white`}
                     >
                         Suivant
                     </button>

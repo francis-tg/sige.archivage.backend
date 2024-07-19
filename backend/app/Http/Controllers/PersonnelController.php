@@ -95,7 +95,7 @@ class PersonnelController extends Controller
             $personnel = Personnels::where('user_id','=',$id);
             $personnel->update($validatedData);
             DB::commit();
-            return response()->json(['message' => 'Personnel mis à jour avec succès', 'personnel' =>git  $personnel], 200);
+            return response()->json(['message' => 'Personnel mis à jour avec succès', 'personnel' => $personnel], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['error' => 'Erreur de mise à jour: ' . $th->getMessage()], 500);
