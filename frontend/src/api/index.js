@@ -119,6 +119,14 @@ export const CREATE_PERSONNEL_API = {
         "Content-Type": "application/json"
     }
 }
+export const UPDATE_PERSONNEL_API = {
+    url: `${BASE_URL}/personnels`,
+    method: "POST",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+    }
+}
 
 export const GET_CATEGORIE_API = {
     url: `${BASE_URL}/categories`,

@@ -6,7 +6,7 @@ import NavLink from './NavLink'; // Assurez-vous d'importer correctement votre c
 
 function Sidebar() {
     return (
-        <div className='w-full bg-[#2e2e2e] h-screen p-2'>
+        <div className='w-full bg-[#2e2e2e]  h-screen p-2'>
             <div className="py-3">
                 <h1 className='text-white uppercase text-center text-xl font-bold'>
                     SIGE Archivage
