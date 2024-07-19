@@ -185,7 +185,7 @@ function Home() {
             Nouveau dossier
           </button>
         </div>
-        <div className='grid grid-cols-8 justify-start w-full'>
+        <div className='grid lg:grid-cols-8 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 justify-start w-full'>
           {searchValue.map((dossier, k) => (
             <div key={k}>
               <ContextMenu className="" >

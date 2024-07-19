@@ -1,5 +1,5 @@
-const BASE_URL = process.env.NODE_ENV === 'production' ? 'https://backend.estlc-unv-ebolowa.com' : 'http://localhost:8000/api';
-
+export const SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://backend.estlc-unv-ebolowa.com' : 'http://localhost:8000';
+const BASE_URL =SERVER_URL+'/api'
 const token = sessionStorage.getItem("token")
 export const LOGIN_API = {
     url: `${BASE_URL}/auth`,
@@ -35,6 +35,22 @@ export const POST_DOCUMENTS_API = {
     method: "POST",
     headers: {
         "Authorization": `Bearer ${token}`
+    }
+}
+export const SHARE_DOCUMENTS_API = {
+    url: `${BASE_URL}/documents`,
+    method: "POST",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+    }
+}
+export const TRACK_DOCUMENTS_CONSULT_API = {
+    url: `${BASE_URL}/consultations`,
+    method: "POST",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
     }
 }
 export const UPDATE_DOCUMENTS_API = {

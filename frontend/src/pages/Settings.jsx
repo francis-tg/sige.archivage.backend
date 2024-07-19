@@ -38,11 +38,11 @@ function Settings() {
         })
     }
     useEffect(() => {
-      fetchBureau();
-      fetchRole();
+        fetchBureau();
+        fetchRole();
     }, [])
-    
-    return load?<Loading/>: (
+
+    return load ? <Loading /> : (
         <div className='flex flex-grow'>
             <div className="mt-5 w-full">
                 <div role="tablist" className="tabs tabs-lifted w-full">
@@ -50,9 +50,8 @@ function Settings() {
                     <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
                         
                     </div> */}
-
                     <input
-                    
+
                         type="radio"
                         name="my_tabs_2"
                         role="tab"
@@ -66,6 +65,17 @@ function Settings() {
                     <input type="radio" defaultChecked name="my_tabs_2" role="tab" className="tab" aria-label="Bureaux" />
                     <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
                         <Bureau Bureaux={Bureaux} />
+                    </div>
+                    <input
+
+                        type="radio"
+                        name="my_tabs_2"
+                        role="tab"
+                        className="tab"
+                        aria-label="Stockage"
+                    />
+                    <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                        Stockage
                     </div>
                 </div>
             </div>

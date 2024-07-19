@@ -1,4 +1,4 @@
-import { GET_DOCUMENTS_API, POST_DOCUMENTS_API } from "..";
+import { GET_DOCUMENTS_API, POST_DOCUMENTS_API, SHARE_DOCUMENTS_API, TRACK_DOCUMENTS_CONSULT_API } from "..";
 
 /**
  * Envoie des données de compte avec une image.
@@ -39,6 +39,19 @@ export async function getDocument(){
     return await fetch(url, {...meta,credentials:'include'})
 }
 
+export async function viewDocument(id){
+    const {url,...meta} = GET_DOCUMENTS_API;
+    return await fetch(url+`/${id}`, {...meta,credentials:'include'})
+}
+
+export async function consultationDocument(data){
+    const {url,...meta} = TRACK_DOCUMENTS_CONSULT_API;
+    return await fetch(url, {...meta,body:JSON.stringify(data),credentials:'include'})
+}
+export async function shareDocument(data,id){
+    const {url,...meta} = SHARE_DOCUMENTS_API;
+    return await fetch(url+`/${id}`, {...meta,body:JSON.stringify(data),credentials:'include'})
+}
 export async function countDocument(){
     const {url,...meta} = GET_DOCUMENTS_API;
     return await fetch(url+'/count', {...meta,credentials:'include'})

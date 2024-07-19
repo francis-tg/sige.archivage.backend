@@ -1,7 +1,7 @@
-import { IoApps, IoDocumentAttach } from "react-icons/io5";
+import { IoApps, IoDocumentAttach, IoEyeSharp } from "react-icons/io5";
 import React from 'react';
 import { Separator } from "../ui/ui/separator";
-import { LuUsers2 } from "react-icons/lu";
+import { LuShare2, LuUsers2 } from "react-icons/lu";
 import NavLink from './NavLink'; // Assurez-vous d'importer correctement votre composant NavLink
 
 function Sidebar() {
@@ -28,7 +28,14 @@ function Sidebar() {
                     <NavLink to="/doc" icon={IoDocumentAttach}>
                         Documents
                     </NavLink>
+                    <NavLink to="/share" icon={LuShare2}>
+                        Partagé avec moi
+                    </NavLink>
+                    <NavLink to="/seen" icon={IoEyeSharp}>
+                        Documents consultés
+                    </NavLink>
                 </div>
+
                 <Separator />
                 <div className="flex flex-col gap-5">
                     <p className=' text-white/50'>

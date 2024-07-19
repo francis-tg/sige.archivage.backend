@@ -11,7 +11,7 @@ function Document() {
   const [documents, setDocuments] = useState([]);
   const [view, setView] = useState('grid');
   const [currentPage, setCurrentPage] = useState(1);
-  const documentsPerPage = 10;
+  const documentsPerPage = view==='grid'? 10:8;
   const [searchValue,setSearchValue] = useState([])
   const fetchDocuments = async () => {
     try {
@@ -80,7 +80,7 @@ function Document() {
       <div className="flex justify-between items-center">
         <div>
           <label className="input input-sm  input-bordered flex items-center gap-2">
-            <input type="text" onChange={searchDocument} className="grow w-full focus:w-48 hover:w-96 duration-300" placeholder="Chercher un document..." />
+            <input type="text" onChange={searchDocument} className="grow w-full focus:w-48 hover:w-48 duration-300" placeholder="Chercher un document..." />
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
