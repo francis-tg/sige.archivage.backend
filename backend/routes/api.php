@@ -23,6 +23,7 @@ Route::group([
 ], function($router){
     Route::post('/', [AuthController::class, 'authenticate'])->withoutMiddleware([AuthPersonnelMiddleware::class]);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::put('/update', [AuthController::class, 'update']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
@@ -58,7 +59,7 @@ Route::delete('/documents/{doc_id}', [DocumentController::class, 'destroy']);
 //Personnels
 Route::get('/personnels', [PersonnelController::class, 'index']);
 Route::post('/personnels', [PersonnelController::class, 'store']);
-Route::get('/personnels', [PersonnelController::class, 'show']);
+Route::get('/personnels/show', [PersonnelController::class, 'show']);
 Route::put('/personnels', [PersonnelController::class, 'update']);
 Route::delete('/personnels', [PersonnelController::class, 'destroy']);
 

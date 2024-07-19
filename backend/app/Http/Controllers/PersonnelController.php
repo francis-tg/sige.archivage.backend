@@ -82,9 +82,9 @@ class PersonnelController extends Controller
             'lieu_naissance' => 'required|string',
             'statut_mat' => 'required|string',
             'lieu_residence' => 'required|string',
-            'first_phone' => 'required|string|unique',
-            'second_phone' => 'nullable|string|unique',
-            'cni' => 'required|string|unique',
+            'first_phone' => 'required|string|unique:personnels,first_phone',
+            'second_phone' => 'nullable|string|unique:personnels,second_phone',
+            'cni' => 'required|string|unique:personnels,cni',
             'lang' => 'nullable|string',
             'bibliographie' => 'nullable|string',
             'nb_enfant' => 'nullable|integer',
@@ -95,7 +95,7 @@ class PersonnelController extends Controller
             $personnel = Personnels::where('user_id','=',$id);
             $personnel->update($validatedData);
             DB::commit();
-            return response()->json(['message' => 'Personnel mis à jour avec succès', 'personnel' => $personnel], 200);
+            return response()->json(['message' => 'Personnel mis à jour avec succès', 'personnel' =>git  $personnel], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['error' => 'Erreur de mise à jour: ' . $th->getMessage()], 500);

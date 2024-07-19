@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -70,6 +71,14 @@ class AuthController extends Controller
             'role' => $role,
             'token' => JWTAuth::refresh(),
         ]);
+    }
+    public function update(Request $request){
+        $validate = $request->validate([
+            'email' => 'required|string|unique:users,email',
+            'pwd_pers' => 'required|string',
+        ]);
+        $personnel = auth("api")->user();
+        $personnel->update($validate);
     }
 
     public function refresh()
