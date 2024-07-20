@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Personnels;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -63,16 +65,28 @@ class AuthController extends Controller
 
     public function me()
     {
-        $personnel = auth("api")->user();
-        $role = $personnel->roles()->pluck('label')->first();
+        $user = auth("api")->user();
+        $role = $user->roles()->pluck('label')->first();
+        $personnel = Personnels::where("user_id", $user->id)->first();
+
+        if (!$personnel) {
+            return response()->json([
+                'message' => 'Personnel not found',
+            ], 404);
+        }
+
+        $photoUrl = $personnel->photo ? Storage::url($personnel->photo) : null;
 
         return response()->json([
-            'user' => $personnel,
+            'user' => $user,
+            'profile' => $photoUrl,
             'role' => $role,
             'token' => JWTAuth::refresh(),
         ]);
     }
-    public function update(Request $request){
+
+    public function update(Request $request)
+    {
         $validate = $request->validate([
             'email' => 'required|string|unique:users,email',
             'pwd_pers' => 'required|string',
@@ -91,7 +105,7 @@ class AuthController extends Controller
         return response()->json([
             'token' => $token,
             'token_type' => 'bearer',
-            "message"=>"Connexion réussie",
+            "message" => "Connexion réussie",
             'expires_in' => JWTAuth::factory()->getTTL() * 60
         ]);
     }
