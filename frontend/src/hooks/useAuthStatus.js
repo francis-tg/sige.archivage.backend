@@ -11,24 +11,24 @@ export const useAuthStatus = () => {
     if (isMounted) {
       try {
         const { url, ...rest } = AUTH_ME_API
-        
-         fetch(url, { ...rest, credentials:"include"}).then(async (res) => {
+
+        fetch(url, { ...rest, credentials: "include" }).then(async (res) => {
           if (res.status === 200) {
-            
+
             const data = await res.json()
-            const { token, user,role } = data
+            const { token, user, role, profile } = data
             setLoggedIn(true)
-             sessionStorage.setItem('token', token)
-            sessionStorage.setItem('user', JSON.stringify({...user,role})) 
+            sessionStorage.setItem('token', token)
+            sessionStorage.setItem('user', JSON.stringify({ ...user, role, profile }))
             setCheckingStatus(false)
           }
           else {
             setCheckingStatus(false)
           }
-        }).catch(function(err){
+        }).catch(function (err) {
           setCheckingStatus(false)
           console.log(err)
-        }) 
+        })
         /* if (sessionStorage.getItem('token')) {
           setLoggedIn(true)
           //sessionStorage.setItem("user", JSON.stringify(user))
@@ -45,7 +45,7 @@ export const useAuthStatus = () => {
     return () => {
       isMounted.current = false
     }
-  }, [isMounted,token])
+  }, [isMounted, token])
   return { loggedIn, checkingStatus }
 }
 

@@ -4,7 +4,7 @@ import { GET_DOCUMENTS_API, POST_DOCUMENTS_API, SHARE_DOCUMENTS_API, TRACK_DOCUM
  * Envoie des données de compte avec une image.
  * 
  * @param {Object} data - Les données à envoyer.
- * @param {File} image - Le fichier d'image à envoyer.
+ * @param {File} file - Le fichier d'image à envoyer.
  * @returns {Promise<Response>} La réponse de la requête fetch.
  */
 export async function createDocument(data, file) {

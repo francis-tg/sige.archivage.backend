@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import AuthInfo from './_Partials/AuthInfo';
 import PersonnalInfo from './_Partials/PersonnalInfo';
+import { updateProfile } from '../api/routes/personnel';
+import { SERVER_URL } from '../api';
 
 const Profile = () => {
   const [user, setUser] = useState({})
-  
+  const [photo,setPhoto] = useState(null)
   useEffect(() => {
     const getUser = JSON.parse(sessionStorage.getItem("user"))
     setUser(getUser)
+    setPhoto(SERVER_URL+getUser?.profile)
   }, []);
+  /**
+   * 
+   * @param {Event} e 
+   */
+  function onFileChange(e){
+    updateProfile(e.target.files[0])
+    const url = URL.createObjectURL(e.target.files[0])
+    setPhoto(url)
+  }
   return (
     <div className='w-full py-5'>
       <div className='flex items-start gap-3'>
         <div className="avatar">
-          <div className="w-24 rounded-full">
-            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+          <div className="w-24 rounded-full relative">
+            <img src={photo??"https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} />
+            <input onChange={onFileChange} type="file" accept='image/*' className=' opacity-0 absolute top-0 w-full h-full rounded-full appearance-none file:appearance-none' />
           </div>
         </div>
        <div>
