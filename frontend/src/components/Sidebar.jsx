@@ -28,12 +28,12 @@ function Sidebar() {
                     <NavLink to="/doc" icon={IoDocumentAttach}>
                         Documents
                     </NavLink>
-                    <NavLink to="/share" icon={LuShare2}>
+                    {/* <NavLink to="/share" icon={LuShare2}>
                         Partagé avec moi
                     </NavLink>
                     <NavLink to="/seen" icon={IoEyeSharp}>
                         Documents consultés
-                    </NavLink>
+                    </NavLink> */}
                 </div>
 
                 <Separator />
