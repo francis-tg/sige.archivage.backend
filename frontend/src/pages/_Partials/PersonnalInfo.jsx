@@ -95,16 +95,16 @@ function PersonnalInfo() {
                         </select>
                     </div>
                     <div className="form-control mb-3">
-                        <label htmlFor="name" className='mb-1'>Nombre d'enfant</label>
-                        <input type="text" id='name' name='nb_enfant' onChange={(e) => getFormData(e, setPersonnel)} placeholder={personnel.nb_enfant} className="input input-bordered w-full" />
+                        <label htmlFor="nb_enfant" className='mb-1'>Nombre d'enfant</label>
+                        <input type="text" id='nb_enfant' name='nb_enfant' onChange={(e) => getFormData(e, setPersonnel)} placeholder={personnel.nb_enfant} className="input input-bordered w-full" />
                     </div>
                     <div className="form-control">
                         <label className="label">
                             <span className="label-text">Status matrimoniale</span>
                         </label>
                         <select
-                            name="statu_mat"
-                            value={personnel.statut_mat}
+                            name="sexe"
+                            value={personnel.sexe}
                             onChange={(e)=>getFormData(e, setPersonnel)}
                             className="select select-bordered"
                             required
