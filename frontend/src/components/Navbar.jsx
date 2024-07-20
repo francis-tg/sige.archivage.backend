@@ -36,7 +36,7 @@ function Navbar({ toggleSidebar }) {
                 <Link to="/setting"><LuCog size={20} /></Link>
                 <div className="dropdown dropdown-end">
                     {user?.profile ? (
-                        <div className="avatar online">
+                        <div className="avatar online" tabIndex={0}>
                             <div className="w-8 rounded-full">
                                 <img src={SERVER_URL+user?.profile} />
                             </div>

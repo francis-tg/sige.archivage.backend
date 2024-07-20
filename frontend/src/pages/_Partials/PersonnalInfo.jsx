@@ -82,7 +82,7 @@ function PersonnalInfo() {
                             <span className="label-text">Status matrimoniale</span>
                         </label>
                         <select
-                            name="status_mat"
+                            name="statut_mat"
                             value={personnel.statut_mat}
                             onChange={(e)=>getFormData(e, setPersonnel)}
                             className="select select-bordered"

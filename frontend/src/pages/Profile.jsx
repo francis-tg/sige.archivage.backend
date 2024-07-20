@@ -6,36 +6,38 @@ import { SERVER_URL } from '../api';
 
 const Profile = () => {
   const [user, setUser] = useState({})
-  const [photo,setPhoto] = useState(null)
+  const [photo, setPhoto] = useState(null)
   useEffect(() => {
     const getUser = JSON.parse(sessionStorage.getItem("user"))
     setUser(getUser)
-    setPhoto(SERVER_URL+getUser?.profile)
+    setPhoto(SERVER_URL + getUser?.profile)
   }, []);
   /**
    * 
    * @param {Event} e 
    */
-  function onFileChange(e){
-    updateProfile(e.target.files[0])
-    const url = URL.createObjectURL(e.target.files[0])
-    setPhoto(url)
+  function onFileChange(e) {
+    if (e.target.files?.length > 0) {
+      updateProfile(e.target.files[0])
+      const url = URL.createObjectURL(e.target.files[0])
+      setPhoto(url)
+    }
   }
   return (
     <div className='w-full py-5'>
       <div className='flex items-start gap-3'>
         <div className="avatar">
           <div className="w-24 rounded-full relative">
-            <img src={photo??"https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} />
+            <img src={photo ?? "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} />
             <input onChange={onFileChange} type="file" accept='image/*' className=' opacity-0 absolute top-0 w-full h-full rounded-full appearance-none file:appearance-none' />
           </div>
         </div>
-       <div>
-       <h1 className='text-3xl font-bold mb-3'>
-          {user.name}
-        </h1>
-        <p className="mx-2 badge badge-neutral"> {user.role}</p>
-       </div>
+        <div>
+          <h1 className='text-3xl font-bold mb-3'>
+            {user.name}
+          </h1>
+          <p className="mx-2 badge badge-neutral"> {user.role}</p>
+        </div>
 
       </div>
       <div className='flex flex-grow'>
@@ -55,12 +57,12 @@ const Profile = () => {
               aria-label="Informations personnelles"
             />
             <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
-              <PersonnalInfo/>
+              <PersonnalInfo />
             </div>
 
             <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Information de connexion" />
             <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
-              <AuthInfo user={user}/>
+              <AuthInfo user={user} />
             </div>
             {/* <input
 
