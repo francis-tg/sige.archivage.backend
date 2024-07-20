@@ -79,16 +79,16 @@ function PersonnalInfo() {
                     </div>
                     <div className="form-control">
                         <label className="label">
-                            <span className="label-text">Sexe</span>
+                            <span className="label-text">Status matrimoniale</span>
                         </label>
                         <select
-                            name="sexe"
-                            value={personnel.sexe}
+                            name="status_mat"
+                            value={personnel.statut_mat}
                             onChange={(e)=>getFormData(e, setPersonnel)}
                             className="select select-bordered"
                             required
                         >
-                            <option value="">Sélectionner un genre</option>
+                            <option value="">Sélectionner votre status matrimoniale</option>
                             <option value="Célibataire">Célibataire</option>
                             <option value="Marié">Marié</option>
                             <option value="Divorcé">Divorcé</option>
@@ -100,7 +100,7 @@ function PersonnalInfo() {
                     </div>
                     <div className="form-control">
                         <label className="label">
-                            <span className="label-text">Status matrimoniale</span>
+                            <span className="label-text">Sélectionner un genre</span>
                         </label>
                         <select
                             name="sexe"
@@ -109,7 +109,7 @@ function PersonnalInfo() {
                             className="select select-bordered"
                             required
                         >
-                            <option value="">Sélectionner un status</option>
+                            <option value="">Sélectionner votre genre</option>
                             <option value="Homme">Homme</option>
                             <option value="Femme">Femme</option>
                         </select>
