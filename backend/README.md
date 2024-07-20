@@ -68,3 +68,4 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
 php artisan jwt:secret
+php artisan storage:link

@@ -60,7 +60,7 @@ Route::delete('/documents/{doc_id}', [DocumentController::class, 'destroy']);
 Route::get('/personnels', [PersonnelController::class, 'index']);
 Route::post('/personnels', [PersonnelController::class, 'store']);
 Route::get('/personnels/show', [PersonnelController::class, 'show']);
-Route::put('/personnels', [PersonnelController::class, 'update']);
+Route::post('/personnels', [PersonnelController::class, 'update']);
 Route::post('/personnels/profile', [PersonnelController::class, 'updateProfile']);
 Route::delete('/personnels', [PersonnelController::class, 'destroy']);
 

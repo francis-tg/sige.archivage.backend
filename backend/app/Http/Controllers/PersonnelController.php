@@ -122,25 +122,36 @@ class PersonnelController extends Controller
             'lieu_naissance' => 'required|string',
             'statut_mat' => 'required|string',
             'lieu_residence' => 'required|string',
-            'first_phone' => 'required|string|unique:personnels,first_phone',
-            'second_phone' => 'nullable|string|unique:personnels,second_phone',
-            'cni' => 'required|string|unique:personnels,cni',
+            'first_phone' => 'required|string',
+            'second_phone' => 'nullable|string',
+            'cni' => 'required|string',
             'lang' => 'nullable|string',
             'bibliographie' => 'nullable|string',
             'nb_enfant' => 'nullable|integer',
         ]);
+
         try {
             DB::beginTransaction();
             $id = auth('api')->id();
-            $personnel = Personnels::where('user_id', '=', $id);
+            $personnel = Personnels::where('user_id', $id)->first();
+
+            if (!$personnel) {
+                return response()->json(['error' => 'Personnel not found'], 404);
+            }
+
             $personnel->update($validatedData);
             DB::commit();
-            return response()->json(['message' => 'Personnel mis à jour avec succès', 'personnel' => $personnel], 200);
+
+            // Retrieve the updated personnel data
+            $updatedPersonnel = Personnels::where('user_id', $id)->first();
+
+            return response()->json(['message' => 'Personnel mis à jour avec succès', 'personnel' => $updatedPersonnel], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['error' => 'Erreur de mise à jour: ' . $th->getMessage()], 500);
         }
     }
+
     /**
      * Remove the specified resource from storage.
      */

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Personnels;
-use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -80,6 +80,7 @@ class AuthController extends Controller
         return response()->json([
             'user' => $user,
             'profile' => $photoUrl,
+            'personnel'=>$personnel,
             'role' => $role,
             'token' => JWTAuth::refresh(),
         ]);
@@ -87,14 +88,17 @@ class AuthController extends Controller
 
     public function update(Request $request)
     {
-        $validate = $request->validate([
-            'email' => 'required|string|unique:users,email',
-            'pwd_pers' => 'required|string',
+        $validatedData = $request->validate([
+            'email' => 'required|string|unique:users,email,' . auth('api')->id(),
+            'password' => 'required|string|min:8',
         ]);
-        $personnel = auth("api")->user();
-        $personnel->update($validate);
-    }
 
+        $personnel = auth("api")->user();
+        $validatedData['password'] = Hash::make($validatedData['password']);
+        $personnel->update($validatedData);
+
+        return response()->json(['message' => 'Personnel mis à jour avec succès'], 200);
+    }
     public function refresh()
     {
         return $this->respondWithToken(JWTAuth::refresh());
