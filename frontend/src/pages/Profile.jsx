@@ -57,7 +57,7 @@ const Profile = () => {
               aria-label="Informations personnelles"
             />
             <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
-              <PersonnalInfo />
+              <PersonnalInfo user={user} />
             </div>
 
             <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Information de connexion" />

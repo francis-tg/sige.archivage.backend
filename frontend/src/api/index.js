@@ -129,7 +129,7 @@ export const CREATE_PERSONNEL_API = {
 }
 export const UPDATE_PERSONNEL_API = {
     url: `${BASE_URL}/personnels`,
-    method: "PUT",
+    method: "POST",
     headers: {
         "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json"
